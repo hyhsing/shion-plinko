@@ -505,21 +505,9 @@ class Triangle {
 }
 
 
-// Sunflower bumpers - arranged in neat rows
+// 向日葵 bumpers - 暫時移除
 const bumpers = [];
 const PLAY_W = LANE_X - 24; // playable width ~436
-// Row 1 - 3 bumpers
-for (let i = 0; i < 3; i++) {
-  bumpers.push(new SunflowerBumper(100 + i * 130, 180, 28));
-}
-// Row 2 - 4 bumpers (offset)
-for (let i = 0; i < 4; i++) {
-  bumpers.push(new SunflowerBumper(50 + i * 110, 270, 26));
-}
-// Row 3 - 3 bumpers
-for (let i = 0; i < 3; i++) {
-  bumpers.push(new SunflowerBumper(100 + i * 130, 360, 24));
-}
 
 // Orange pegs - arranged in neat grid pattern
 const pegs = [];
@@ -541,29 +529,26 @@ for (let i = 0; i < 7; i++) {
   pegs.push(new Peg(35 + i * 62, 520));
 }
 
-// White triangles - arranged neatly at top
+// 白色三角形障礙物 - 暫時移除
 const triangles = [];
-for (let i = 0; i < 5; i++) {
-  triangles.push(new Triangle(60 + i * 85, 120, 22, 'down'));
-}
 
 
-// Walls - arc connects to lane RIGHT side (outer wall)
+// 牆壁設定 - 圓弧連接到發射軌道右側外牆
 const walls = [];
 function addWall(x1, y1, x2, y2) { walls.push({x1, y1, x2, y2}); }
 
 const FRAME_LEFT = 12;
-const FRAME_TOP = 120;  // Arc position
+const FRAME_TOP = 200;  // 圓弧位置
 
-// LEFT WALL
+// 左側牆壁
 addWall(FRAME_LEFT, FRAME_TOP, FRAME_LEFT, H - SLOT_H);
 
-// TOP ARC - goes from left all the way to lane outer wall (W-8)
+// 頂部圓弧 - 從左側延伸到發射軌道外牆 (W-8)
 const arcStartX = FRAME_LEFT;
-const arcEndX = W - 8;  // Connects to lane RIGHT side!
+const arcEndX = W - 8;  // 連接到發射軌道右側！
 const arcCx = (arcStartX + arcEndX) / 2;
 const halfWidth = (arcEndX - arcStartX) / 2;
-const arcHeight = 160;
+const arcHeight = 150;
 
 const arcR = (arcHeight * arcHeight + halfWidth * halfWidth) / (2 * arcHeight);
 const arcCy = FRAME_TOP - arcHeight + arcR;
@@ -580,11 +565,11 @@ for (let i = 0; i < 16; i++) {
   addWall(x1, y1, x2, y2);
 }
 
-// LANE LEFT WALL - starts at 200 to allow ball entry from arc at top
-const LANE_WALL_TOP = 200;
+// 發射軌道左側牆 - 從 200 開始，上方留空讓球從圓弧進入場內
+const LANE_WALL_TOP = 220;
 addWall(LANE_X, LANE_WALL_TOP, LANE_X, H - SLOT_H);
 
-// LANE OUTER WALL - connects from arc down
+// 發射軌道外牆（右側）- 從圓弧向下延伸
 addWall(W - 8, FRAME_TOP, W - 8, H);
 
 function buildSlots() {
