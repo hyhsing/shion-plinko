@@ -721,8 +721,8 @@ function launchNext() {
 function launchBall() {
   if (!currentBall || !currentBall.inLane || plungerPull < 5) return;
   const power = plungerPull / PLUNGER_MAX;
-  // Launch straight up
-  currentBall.vy = -1200 - power * 900;
+  // Launch straight up (reduced power)
+  currentBall.vy = -800 - power * 500;
   currentBall.vx = 0;
   currentBall.inLane = false;
   currentBall.phase = 'sprint';
@@ -977,6 +977,18 @@ function draw() {
   laneGrad.addColorStop(1, '#1a3050');
   ctx.fillStyle = laneGrad;
   ctx.fillRect(LANE_X, LANE_VISUAL_TOP, LANE_W, H - LANE_VISUAL_TOP + 5);
+
+  // Lane left and right borders only
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(LANE_X, LANE_VISUAL_TOP);
+  ctx.lineTo(LANE_X, H);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(LANE_X + LANE_W, LANE_VISUAL_TOP);
+  ctx.lineTo(LANE_X + LANE_W, H);
+  ctx.stroke();
 
   // Lane inner glow lines
   ctx.strokeStyle = 'rgba(255, 200, 100, 0.3)';
