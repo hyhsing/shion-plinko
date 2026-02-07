@@ -439,10 +439,10 @@ const SHION_POSES = {
   notes: { x: 3, y: 1, text: '筆記筆記' },
   shocked: { x: 0, y: 2, text: '傻眼...' },
   laugh: { x: 1, y: 2, text: '笑死～' },
-  scared: { x: 2, y: 2, text: '哇！' },
+  scared: { x: 2, y: 2, text: '嚇到吃手手' },
   please: { x: 3, y: 2, text: '拜託拜託！' },
   offWork: { x: 0, y: 3, text: '下班啦！' },
-  empty: { x: 1, y: 3, text: '...' },
+  empty: { x: 1, y: 3, text: '腦袋空空' },
   eat: { x: 2, y: 3, text: '去吃飯？' }
 };
 
@@ -454,8 +454,8 @@ function setShionPose(poseKey, duration = 0) {
   const pose = SHION_POSES[poseKey];
   if (!pose) return;
 
-  // 計算 background-position (120px per sprite)
-  const spriteSize = 120;
+  // 計算 background-position (根據實際顯示尺寸)
+  const spriteSize = shionSprite.offsetWidth;
   const posX = -pose.x * spriteSize;
   const posY = -pose.y * spriteSize;
   shionSprite.style.backgroundPosition = `${posX}px ${posY}px`;
