@@ -234,9 +234,94 @@
       height: 30px;
     }
   }
+
+  /* Shion 管理員樣式 */
+  .shion-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+  }
+  .shion-sprite {
+    width: 120px;
+    height: 120px;
+    background-image: url('/static/shion/shion-sprites.jpeg');
+    background-size: 480px 480px;
+    background-position: 0 0;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: background-position 0.15s ease-out;
+  }
+  .shion-bubble {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #2d5a87;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    position: relative;
+    max-width: 140px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+  .shion-bubble.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .shion-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid white;
+  }
+  @media (max-width: 900px) {
+    .shion-container {
+      bottom: 10px;
+      left: 10px;
+    }
+    .shion-sprite {
+      width: 80px;
+      height: 80px;
+      background-size: 320px 320px;
+    }
+    .shion-bubble {
+      font-size: 0.7rem;
+      padding: 5px 8px;
+      max-width: 100px;
+    }
+  }
+  @media (max-width: 540px) {
+    .shion-container {
+      bottom: 5px;
+      left: 5px;
+    }
+    .shion-sprite {
+      width: 60px;
+      height: 60px;
+      background-size: 240px 240px;
+    }
+  }
 </style>
 </head>
 <body>
+
+<!-- Shion 管理員 -->
+<div class="shion-container" id="shionContainer">
+  <div class="shion-bubble" id="shionBubble">加油加油！</div>
+  <div class="shion-sprite" id="shionSprite"></div>
+</div>
 
 <div class="cloud-bg">
   <div class="cloud">☁️</div>
@@ -337,6 +422,62 @@ function playLand() { const n = [523,659,784,1047]; n.forEach((f,i) => setTimeou
 function playComplete() { const m = [523,659,784,1047,880,1047,1319]; m.forEach((f,i) => setTimeout(() => playTone(f, 0.3, 'triangle', 0.6), i*120)); }
 function playPeg() { playTone(800 + Math.random() * 200, 0.05, 'sine', 0.3); }
 function playTriangle() { playTone(600, 0.08, 'triangle', 0.35); }
+
+// ============ SHION 管理員 ============
+// Sprite 位置對應 (4x4 grid, 每格 120px)
+// Row 0: 早安, 交給我, 沒問題, 辛苦了
+// Row 1: 收到, 加油加油, 讚喔, 筆記筆記
+// Row 2: 傻眼, 笑死, 嚇到吃手手, 拜託拜託
+// Row 3: 下班啦, 腦袋空空, 去吃飯, 愛你唷
+const SHION_POSES = {
+  morning: { x: 0, y: 0, text: '早安！' },
+  ready: { x: 1, y: 0, text: '交給我！' },
+  noProblem: { x: 2, y: 0, text: '沒問題！' },
+  tired: { x: 3, y: 0, text: '辛苦了～' },
+  gotIt: { x: 0, y: 1, text: '收到！' },
+  cheer: { x: 1, y: 1, text: '加油加油！' },
+  thumbsUp: { x: 2, y: 1, text: '讚喔！' },
+  notes: { x: 3, y: 1, text: '筆記筆記' },
+  shocked: { x: 0, y: 2, text: '傻眼...' },
+  laugh: { x: 1, y: 2, text: '笑死～' },
+  scared: { x: 2, y: 2, text: '哇！' },
+  please: { x: 3, y: 2, text: '拜託拜託！' },
+  offWork: { x: 0, y: 3, text: '下班啦！' },
+  empty: { x: 1, y: 3, text: '...' },
+  eat: { x: 2, y: 3, text: '去吃飯？' }
+};
+
+let shionTimeout = null;
+const shionSprite = document.getElementById('shionSprite');
+const shionBubble = document.getElementById('shionBubble');
+
+function setShionPose(poseKey, duration = 0) {
+  const pose = SHION_POSES[poseKey];
+  if (!pose) return;
+
+  // 計算 background-position (120px per sprite)
+  const spriteSize = 120;
+  const posX = -pose.x * spriteSize;
+  const posY = -pose.y * spriteSize;
+  shionSprite.style.backgroundPosition = `${posX}px ${posY}px`;
+
+  // 顯示對話泡泡
+  shionBubble.textContent = pose.text;
+  shionBubble.classList.add('show');
+
+  // 清除舊的計時器
+  if (shionTimeout) clearTimeout(shionTimeout);
+
+  // 設定泡泡消失時間
+  if (duration > 0) {
+    shionTimeout = setTimeout(() => {
+      shionBubble.classList.remove('show');
+    }, duration);
+  }
+}
+
+// 初始 Shion 狀態
+setShionPose('morning', 3000);
 
 // ============ GAME CONFIG ============
 const GROUP_COLORS = ['#e53935','#ff9800','#4caf50','#2196f3','#9c27b0','#00bcd4','#ff5722','#673ab7','#e91e63','#8bc34a','#f44336','#3f51b5'];
@@ -604,29 +745,29 @@ class Triangle {
 const bumpers = [];
 const PLAY_W = LANE_X - 24; // playable width ~436
 
-// 橘色圓釘 - 統一生成邏輯，牆邊和中間一起考慮
+// 橘色圓釘 - 統一生成邏輯，確保球不會卡住
 const pegs = [];
-const PEG_AREA_LEFT = 28;  // 靠近左牆 (牆在 x=12)
-const PEG_AREA_RIGHT = LANE_X - 28;  // 靠近發射軌道
+const PEG_AREA_LEFT = 40;   // 離牆遠一點
+const PEG_AREA_RIGHT = LANE_X - 40;  // 離發射軌道遠一點
 const PEG_AREA_WIDTH = PEG_AREA_RIGHT - PEG_AREA_LEFT;
-const ROW_SPACING = 50;  // 行間距
-const MIN_PEG_DISTANCE = 45;  // 最小釘子間距
+const ROW_SPACING = 55;  // 加大行間距
+const MIN_PEG_DISTANCE = 50;  // 加大最小釘子間距
 
 // 統一生成釘子的函數
 function generatePegs() {
   const tempPegs = [];
   const startY = 260;
-  const endY = 540;
+  const endY = 530;
   const numRows = Math.floor((endY - startY) / ROW_SPACING) + 1;
 
   for (let row = 0; row < numRows; row++) {
     const y = startY + row * ROW_SPACING;
     const isEvenRow = row % 2 === 0;
 
-    // 偶數行 5 顆，奇數行 4 顆（交錯）
-    const numPegs = isEvenRow ? 5 : 4;
-    const spacing = PEG_AREA_WIDTH / (numPegs - 1);
-    const offsetX = isEvenRow ? 0 : spacing / 2;
+    // 偶數行 4 顆，奇數行 3 顆（減少密度）
+    const numPegs = isEvenRow ? 4 : 3;
+    const spacing = PEG_AREA_WIDTH / (numPegs + 1);
+    const offsetX = isEvenRow ? spacing : spacing * 1.5;
 
     for (let i = 0; i < numPegs; i++) {
       const x = PEG_AREA_LEFT + offsetX + i * spacing;
@@ -662,6 +803,16 @@ function generatePegs() {
 for (const p of generatePegs()) {
   pegs.push(new Peg(p.x, p.y));
 }
+
+// 靠牆釘子 - 防止球直接滑落，交錯排列
+// 左牆 (x=12)，釘子放在 x=25
+pegs.push(new Peg(25, 285));
+pegs.push(new Peg(25, 395));
+pegs.push(new Peg(25, 505));
+
+// 右牆 (發射軌道左側)，釘子放在 LANE_X - 25
+pegs.push(new Peg(LANE_X - 25, 340));
+pegs.push(new Peg(LANE_X - 25, 450));
 
 // 白色三角形障礙物 - 暫時移除
 const triangles = [];
@@ -864,6 +1015,8 @@ function createClickEffect(x, y) {
 
   // 播放音效
   playPeg();
+  // Shion: 笑死 (隨機觸發)
+  if (Math.random() < 0.3) setShionPose('laugh', 1000);
 }
 
 function handlePointerUp(e) {
@@ -893,6 +1046,8 @@ function launchNext() {
   };
   balls.push(currentBall);
   plungerPull = 0;
+  // Shion: 準備發射
+  setShionPose('ready', 2000);
 }
 
 function launchBall() {
@@ -908,6 +1063,8 @@ function launchBall() {
   plungerPull = 0;
   // 立即允許下一顆發射
   currentBall = null;
+  // Shion: 加油加油
+  setShionPose('cheer', 2000);
 }
 
 function findAvailableSlot() {
@@ -927,6 +1084,8 @@ function ballLanded(ball, slotIdx) {
   el.style.color = GROUP_COLORS[slotIdx % GROUP_COLORS.length];
   renderGroups();
   playLand();
+  // Shion: 讚喔
+  setShionPose('thumbsUp', 1500);
 
   if (launchQueue.length === 0 && !balls.some(b => !b.landed)) {
     setTimeout(showCompletion, 600);
@@ -1114,6 +1273,8 @@ function updatePhysics(dt) {
           ball.vy = -Math.abs(ball.vy) * 0.7 - 200;  // 向上彈開
           ball.vx += (Math.random() - 0.5) * 300;  // 隨機左右偏移
           playPeg();  // 播放碰撞音效
+          // Shion: 傻眼
+          setShionPose('shocked', 1500);
         } else {
           // 位子有空，降落
           ball.x = slots[slotIdx].x + slots[slotIdx].w / 2;
@@ -1528,6 +1689,8 @@ function showCompletion() {
   }
   document.getElementById('completionText').innerHTML = lines.join('<br>');
   document.getElementById('completionOverlay').classList.add('show');
+  // Shion: 下班啦！
+  setShionPose('offWork', 5000);
 }
 
 function resetGame() {
