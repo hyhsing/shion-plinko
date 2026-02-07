@@ -548,7 +548,7 @@ const arcStartX = FRAME_LEFT;
 const arcEndX = W - 8;  // 連接到發射軌道右側！
 const arcCx = (arcStartX + arcEndX) / 2;
 const halfWidth = (arcEndX - arcStartX) / 2;
-const arcHeight = 150;
+const arcHeight = 180;
 
 const arcR = (arcHeight * arcHeight + halfWidth * halfWidth) / (2 * arcHeight);
 const arcCy = FRAME_TOP - arcHeight + arcR;
@@ -566,7 +566,7 @@ for (let i = 0; i < 16; i++) {
 }
 
 // 發射軌道左側牆 - 從 200 開始，上方留空讓球從圓弧進入場內
-const LANE_WALL_TOP = 220;
+const LANE_WALL_TOP = 240;
 addWall(LANE_X, LANE_WALL_TOP, LANE_X, H - SLOT_H);
 
 // 發射軌道外牆（右側）- 從圓弧向下延伸
@@ -969,7 +969,7 @@ function draw() {
   }
 
   // Launch lane - taller now
-  const LANE_VISUAL_TOP = 200;  // Match wall LANE_WALL_TOP
+  const LANE_VISUAL_TOP = 540;  // Match wall LANE_WALL_TOP
   const laneGrad = ctx.createLinearGradient(LANE_X, 0, LANE_X + LANE_W, 0);
   laneGrad.addColorStop(0, '#1a3050');
   laneGrad.addColorStop(0.3, '#2a4570');
@@ -989,11 +989,6 @@ function draw() {
   ctx.moveTo(LANE_X + LANE_W - 4, LANE_VISUAL_TOP + 10);
   ctx.lineTo(LANE_X + LANE_W - 4, H - 60);
   ctx.stroke();
-
-  // Lane borders - golden frame
-  ctx.strokeStyle = '#d4a530';
-  ctx.lineWidth = 4;
-  ctx.strokeRect(LANE_X, LANE_VISUAL_TOP, LANE_W, H - LANE_VISUAL_TOP + 5);
 
   // Upward arrows showing launch direction
   ctx.fillStyle = 'rgba(255, 220, 100, 0.6)';
