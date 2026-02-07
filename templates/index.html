@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>龍巢寶藏 - 彈珠台分組</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@700;900&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: linear-gradient(180deg, #4a9fe8 0%, #87ceeb 30%, #fff 100%);
+    color: #333;
+    font-family: 'Noto Sans TC', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  .cloud-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; height: 250px;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .cloud {
+    position: absolute;
+    font-size: 4rem;
+    opacity: 0.6;
+    animation: cloudDrift 20s ease-in-out infinite;
+    filter: blur(1px);
+  }
+  .cloud:nth-child(1) { left: 5%; top: 20px; animation-delay: 0s; }
+  .cloud:nth-child(2) { left: 25%; top: 60px; animation-delay: -5s; font-size: 3rem; }
+  .cloud:nth-child(3) { right: 15%; top: 30px; animation-delay: -10s; }
+  .cloud:nth-child(4) { right: 35%; top: 80px; animation-delay: -15s; font-size: 2.5rem; }
+  @keyframes cloudDrift {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(30px); }
+  }
+  .header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 12px 0 8px;
+    background: linear-gradient(180deg, #1e3a5f 0%, #2d5a87 100%);
+    border-bottom: 4px solid #ffd700;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .header h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #ffd700, #fff5aa, #ffd700);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+    letter-spacing: 6px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .header-sub { font-size: 0.7rem; color: #87ceeb; letter-spacing: 3px; opacity: 0.9; }
+  @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+  .main-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 15px;
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 0 10px;
+    align-items: flex-start;
+  }
+  .panel { width: 180px; flex-shrink: 0; }
+  .panel h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 0.9rem;
+    color: #2d5a87;
+    margin-bottom: 6px;
+    text-align: center;
+    background: linear-gradient(90deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+  }
+  .name-list { display: flex; flex-direction: column; gap: 3px; max-height: 500px; overflow-y: auto; }
+  .name-item {
+    padding: 5px 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    border: 2px solid rgba(255,200,100,0.3);
+    background: rgba(255,255,255,0.8);
+    color: #2d5a87;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .name-item.launched { opacity: 0.4; transform: scale(0.9); }
+  .name-item.active { border-color: #ff6b9d; box-shadow: 0 0 15px rgba(255,107,157,0.5); background: rgba(255,200,220,0.9); }
+  .canvas-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  canvas {
+    border: 6px solid #d4a530;
+    border-radius: 15px;
+    box-shadow:
+      0 0 0 3px #8b6914,
+      0 0 0 6px #d4a530,
+      0 8px 30px rgba(0,0,0,0.4),
+      inset 0 0 30px rgba(0,0,0,0.2);
+    background: linear-gradient(180deg, #3d5a80 0%, #4a7ab0 100%);
+    display: block;
+  }
+  .controls { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; }
+  .btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  .btn-launch { background: linear-gradient(135deg, #ff6b9d, #ff4081); color: #fff; border: 3px solid #fff; }
+  .btn-launch:hover { box-shadow: 0 0 25px rgba(255,64,129,0.6); transform: scale(1.03); }
+  .btn-launch:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-auto { background: linear-gradient(135deg, #4caf50, #2e7d32); color: #fff; border: 3px solid #fff; }
+  .btn-reset { background: linear-gradient(135deg, #78909c, #546e7a); color: #fff; border: 3px solid #fff; }
+  .control-hint { font-size: 0.7rem; color: #5a7a9a; background: rgba(255,255,255,0.7); padding: 4px 10px; border-radius: 10px; }
+  .control-hint span { color: #ff4081; font-weight: bold; }
+  .groups-panel { width: 200px; flex-shrink: 0; }
+  .groups-panel h3 { font-family: 'Noto Serif TC', serif; font-size: 0.9rem; color: #ffd700; margin-bottom: 6px; text-align: center; }
+  .group-box { border: 3px solid; border-radius: 12px; padding: 6px; margin-bottom: 5px; background: rgba(255,255,255,0.9); box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
+  .group-box.full { box-shadow: 0 0 20px rgba(255,200,0,0.4); }
+  .group-title { font-size: 0.75rem; font-weight: 900; margin-bottom: 3px; display: flex; align-items: center; gap: 4px; }
+  .group-members { display: flex; flex-direction: column; gap: 2px; }
+  .group-member { padding: 3px 6px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-align: center; animation: memberPop 0.4s ease-out; }
+  .group-slot-empty { padding: 3px 6px; font-size: 0.65rem; text-align: center; color: rgba(100,100,100,0.3); border: 1px dashed rgba(100,100,100,0.2); border-radius: 6px; }
+  @keyframes memberPop { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .settings-bar { position: relative; z-index: 1; display: flex; gap: 8px; justify-content: center; align-items: center; padding: 6px 10px; flex-wrap: wrap; background: rgba(255,255,255,0.5); }
+  .settings-bar label { font-size: 0.8rem; color: #2d5a87; font-weight: 600; }
+  .settings-bar input[type="number"] { background: rgba(255,255,255,0.9); border: 2px solid #d4a530; color: #2d5a87; padding: 3px 6px; border-radius: 8px; font-size: 0.8rem; width: 50px; text-align: center; }
+  .name-input-area { position: relative; z-index: 1; max-width: 700px; margin: 0 auto 6px; padding: 6px 12px; background: rgba(255,255,255,0.5); border-radius: 10px; }
+  .name-input-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .name-input-row input[type="text"] { flex: 1; min-width: 140px; background: rgba(255,255,255,0.9); border: 2px solid #d4a530; color: #2d5a87; padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; outline: none; }
+  .name-input-row input[type="text"]:focus { border-color: #ff4081; }
+  .btn-add { padding: 6px 14px; font-size: 0.8rem; background: linear-gradient(135deg, #ff6b9d, #ff4081); color: #fff; border: 2px solid #fff; border-radius: 8px; cursor: pointer; }
+  .btn-clear { padding: 6px 12px; font-size: 0.75rem; background: rgba(100,100,100,0.2); color: #666; border: 1px solid #aaa; border-radius: 8px; cursor: pointer; }
+  .name-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .name-tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 15px; font-size: 0.75rem; font-weight: 700; color: #2d5a87; background: rgba(255,255,255,0.9); border: 2px solid #d4a530; }
+  .name-tag .tag-remove { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,64,129,0.2); color: #ff4081; font-size: 0.65rem; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; }
+  .name-count-hint { font-size: 0.7rem; color: #5a7a9a; margin-top: 3px; }
+  .completion-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,50,100,0.9); z-index: 999; justify-content: center; align-items: center; }
+  .completion-overlay.show { display: flex; }
+  .completion-box { background: linear-gradient(135deg, #fff, #f5f5f5); border: 5px solid #ffd700; border-radius: 20px; padding: 25px 30px; text-align: center; max-width: 450px; box-shadow: 0 0 50px rgba(255,200,0,0.5); }
+  .completion-box h2 { font-family: 'Noto Serif TC', serif; font-size: 1.5rem; color: #d4a530; margin-bottom: 12px; }
+  @media (max-width: 900px) {
+    .main-container { flex-direction: column; align-items: center; }
+    .panel { display: none; }
+    .groups-panel { width: 100%; }
+    #groupsDisplay { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cloud-bg">
+  <div class="cloud">☁️</div>
+  <div class="cloud">☁️</div>
+  <div class="cloud">☁️</div>
+  <div class="cloud">☁️</div>
+</div>
+
+<div class="header">
+  <h1>🐉 龍巢寶藏 🐉</h1>
+  <div class="header-sub">DRAGON NEST PINBALL GROUPING</div>
+</div>
+
+<div class="settings-bar">
+  <label>組數:</label>
+  <input type="number" id="numGroups" value="6" min="2" max="12" onchange="onGroupsChange()">
+  <label>🔊</label>
+  <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width:60px;accent-color:#ff4081" oninput="setVolume(this.value)">
+</div>
+
+<div class="name-input-area">
+  <div class="name-input-row">
+    <input type="text" id="nameTextField" placeholder="輸入名字，按 Enter 或點「加入」">
+    <button class="btn-add" onclick="addNameFromInput()">加入</button>
+    <button class="btn-clear" onclick="clearCustomNames()">清空</button>
+  </div>
+  <div class="name-tags" id="nameTags"></div>
+  <div class="name-count-hint" id="nameCountHint">尚未加入名字 — 直接開始將使用預設名單</div>
+</div>
+
+<div class="main-container">
+  <div class="panel">
+    <h3>📋 待分組名單</h3>
+    <div class="name-list" id="nameList"></div>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="pinball" width="500" height="650"></canvas>
+    <div class="controls">
+      <button class="btn btn-launch" id="btnLaunch" onclick="launchNext()">🎱 發射彈珠</button>
+      <button class="btn btn-auto" id="btnAuto" onclick="toggleAuto()">自動發射</button>
+      <button class="btn btn-reset" onclick="resetGame()">重新開始</button>
+    </div>
+    <div class="control-hint">
+      點擊右側彈簧區域按住蓄力，放開發射！或按 <span>空白鍵</span> 蓄力發射
+    </div>
+  </div>
+  <div class="groups-panel">
+    <h3>🏆 分組結果</h3>
+    <div id="groupsDisplay"></div>
+  </div>
+</div>
+
+<div class="completion-overlay" id="completionOverlay">
+  <div class="completion-box">
+    <h2>🎊 分組完成！🎊</h2>
+    <p id="completionText" style="color:#2d5a87;line-height:1.6;font-size:0.85rem;"></p>
+    <button class="btn btn-launch" style="margin-top:12px" onclick="document.getElementById('completionOverlay').classList.remove('show')">關閉</button>
+  </div>
+</div>
+
+<script>
+// ============ AUDIO ============
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+let masterGain = null;
+let volume = 0.5;
+
+function ensureAudio() {
+  if (!audioCtx) {
+    audioCtx = new AudioCtx();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = volume;
+    masterGain.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+function setVolume(v) { volume = v / 100; if (masterGain) masterGain.gain.value = volume; }
+function playTone(freq, dur, type='sine', vol=1) {
+  ensureAudio();
+  const osc = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  g.gain.setValueAtTime(0.3 * vol, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.connect(g); g.connect(masterGain);
+  osc.start(); osc.stop(audioCtx.currentTime + dur);
+}
+const PENTA = [523, 587, 659, 784, 880, 1047];
+function playBumper() { playTone(PENTA[Math.floor(Math.random()*PENTA.length)], 0.15, 'triangle', 0.5); }
+function playFlipper() { playTone(150, 0.05, 'triangle', 0.4); }
+function playSlingshot() { playTone(440, 0.1, 'square', 0.3); }
+function playLaunch() { playTone(120, 0.25, 'sawtooth', 0.4); }
+function playLand() { const n = [523,659,784,1047]; n.forEach((f,i) => setTimeout(() => playTone(f, 0.15, 'triangle', 0.5), i*60)); }
+function playComplete() { const m = [523,659,784,1047,880,1047,1319]; m.forEach((f,i) => setTimeout(() => playTone(f, 0.3, 'triangle', 0.6), i*120)); }
+function playPeg() { playTone(800 + Math.random() * 200, 0.05, 'sine', 0.3); }
+function playTriangle() { playTone(600, 0.08, 'triangle', 0.35); }
+
+// ============ GAME CONFIG ============
+const GROUP_COLORS = ['#e53935','#ff9800','#4caf50','#2196f3','#9c27b0','#00bcd4','#ff5722','#673ab7','#e91e63','#8bc34a','#f44336','#3f51b5'];
+const DEFAULT_NAMES = ['愛因斯坦','牛頓','達文西','居里夫人','愛迪生','莎士比亞','貝多芬','莫札特','拿破崙','林肯','甘地','曼德拉','馬丁路德','哥倫布','伽利略','達爾文'];
+
+let customNames = [];
+let names = [];
+let groups = [];
+let groupLimits = [];
+let NUM_GROUPS = 6;
+let launchQueue = [];
+let autoMode = false;
+let autoTimer = null;
+let gameStarted = false;
+
+// ============ NAME MANAGEMENT ============
+const nameTextField = document.getElementById('nameTextField');
+nameTextField.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addNameFromInput(); } });
+
+function addNameFromInput() {
+  const val = nameTextField.value.trim();
+  if (!val) return;
+  val.split(/[,，]/).map(n => n.trim()).filter(n => n).forEach(n => { customNames.push(n); });
+  nameTextField.value = '';
+  renderNameTags();
+  syncNamesAndReset();
+}
+function removeCustomName(idx) { customNames.splice(idx, 1); renderNameTags(); syncNamesAndReset(); }
+function clearCustomNames() { customNames = []; renderNameTags(); syncNamesAndReset(); }
+function renderNameTags() {
+  const c = document.getElementById('nameTags');
+  c.innerHTML = '';
+  customNames.forEach((n, i) => {
+    const t = document.createElement('span');
+    t.className = 'name-tag';
+    t.innerHTML = `${n}<button class="tag-remove" onclick="removeCustomName(${i})">&times;</button>`;
+    c.appendChild(t);
+  });
+  document.getElementById('nameCountHint').textContent = customNames.length === 0
+    ? '尚未加入名字 — 直接開始將使用預設名單'
+    : `共 ${customNames.length} 人，${NUM_GROUPS} 組`;
+}
+
+function syncNamesAndReset() {
+  NUM_GROUPS = parseInt(document.getElementById('numGroups').value) || 6;
+  names = customNames.length > 0 ? [...customNames] : [...DEFAULT_NAMES];
+  if (NUM_GROUPS > names.length) NUM_GROUPS = names.length;
+  const perGroup = Math.ceil(names.length / NUM_GROUPS);
+  groupLimits = Array(NUM_GROUPS).fill(perGroup);
+  groups = Array.from({length: NUM_GROUPS}, () => []);
+  buildSlots();
+  buildUI();
+  launchQueue = names.map((_, i) => i);
+  shuffleArray(launchQueue);
+  balls = [];
+  currentBall = null;
+  gameStarted = false;
+  document.getElementById('btnLaunch').disabled = false;
+}
+function onGroupsChange() { syncNamesAndReset(); renderNameTags(); }
+function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } }
+
+// ============ CANVAS & PHYSICS ============
+const canvas = document.getElementById('pinball');
+const ctx = canvas.getContext('2d');
+const W = canvas.width;
+const H = canvas.height;
+
+// Physics constants
+const GRAVITY = 980;
+const BALL_R = 10;
+const SUBSTEPS = 4;
+const WALL_REST = 0.65;
+const BUMPER_REST = 1.1;
+const PEG_REST = 0.55;
+
+// Layout
+const SLOT_H = 55;
+const LANE_W = 32;
+const LANE_X = W - LANE_W - 8;
+const PLUNGER_REST_Y = H - 50;
+const PLUNGER_MAX = 60;
+
+let slots = [];
+let balls = [];
+let currentBall = null;
+let plungerPull = 0;
+let isPlunging = false;
+let lastTime = 0;
+
+
+// Sunflower Bumpers (Royal Match style)
+class SunflowerBumper {
+  constructor(x, y, r) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.flash = 0;
+    this.rotation = Math.random() * Math.PI * 2;
+  }
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+
+    // Petals
+    const petalCount = 12;
+    const petalR = this.r * 0.45;
+    for (let i = 0; i < petalCount; i++) {
+      const ang = (i / petalCount) * Math.PI * 2;
+      const px = Math.cos(ang) * (this.r - petalR * 0.3);
+      const py = Math.sin(ang) * (this.r - petalR * 0.3);
+      ctx.beginPath();
+      ctx.arc(px, py, petalR, 0, Math.PI * 2);
+      const pg = ctx.createRadialGradient(px, py - petalR*0.3, 0, px, py, petalR);
+      if (this.flash > 0) {
+        pg.addColorStop(0, '#fff');
+        pg.addColorStop(0.5, '#ffff88');
+        pg.addColorStop(1, '#ffcc00');
+      } else {
+        pg.addColorStop(0, '#ffe066');
+        pg.addColorStop(0.5, '#ffcc00');
+        pg.addColorStop(1, '#cc9900');
+      }
+      ctx.fillStyle = pg;
+      ctx.fill();
+    }
+
+    // Center
+    ctx.beginPath();
+    ctx.arc(0, 0, this.r * 0.55, 0, Math.PI * 2);
+    const cg = ctx.createRadialGradient(-this.r*0.1, -this.r*0.1, 0, 0, 0, this.r * 0.55);
+    if (this.flash > 0) {
+      cg.addColorStop(0, '#fff');
+      cg.addColorStop(0.3, '#ffdd44');
+      cg.addColorStop(1, '#dd9900');
+      this.flash--;
+    } else {
+      cg.addColorStop(0, '#ffdd88');
+      cg.addColorStop(0.3, '#ddaa44');
+      cg.addColorStop(1, '#996622');
+    }
+    ctx.fillStyle = cg;
+    ctx.fill();
+
+    // Shine
+    ctx.beginPath();
+    ctx.arc(-this.r * 0.15, -this.r * 0.15, this.r * 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fill();
+
+    ctx.restore();
+  }
+}
+
+// Orange Pegs
+class Peg {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.r = 6;
+    this.flash = 0;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    const g = ctx.createRadialGradient(this.x - 2, this.y - 2, 0, this.x, this.y, this.r);
+    if (this.flash > 0) {
+      g.addColorStop(0, '#fff');
+      g.addColorStop(0.5, '#ffcc00');
+      g.addColorStop(1, '#ff9900');
+      this.flash--;
+    } else {
+      g.addColorStop(0, '#ffaa44');
+      g.addColorStop(0.5, '#ff8800');
+      g.addColorStop(1, '#cc5500');
+    }
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.strokeStyle = '#ffcc88';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+}
+
+// White Triangle obstacles
+class Triangle {
+  constructor(x, y, size, pointing) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.pointing = pointing; // 'down' or 'up'
+    this.flash = 0;
+  }
+  getPoints() {
+    const s = this.size;
+    if (this.pointing === 'down') {
+      return [
+        { x: this.x, y: this.y + s * 0.7 },
+        { x: this.x - s * 0.6, y: this.y - s * 0.4 },
+        { x: this.x + s * 0.6, y: this.y - s * 0.4 }
+      ];
+    } else {
+      return [
+        { x: this.x, y: this.y - s * 0.7 },
+        { x: this.x - s * 0.6, y: this.y + s * 0.4 },
+        { x: this.x + s * 0.6, y: this.y + s * 0.4 }
+      ];
+    }
+  }
+  getEdges() {
+    const pts = this.getPoints();
+    return [[pts[0], pts[1]], [pts[1], pts[2]], [pts[2], pts[0]]];
+  }
+  draw() {
+    const pts = this.getPoints();
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    ctx.lineTo(pts[1].x, pts[1].y);
+    ctx.lineTo(pts[2].x, pts[2].y);
+    ctx.closePath();
+
+    if (this.flash > 0) {
+      ctx.fillStyle = '#ffff88';
+      this.flash--;
+    } else {
+      ctx.fillStyle = '#ffffff';
+    }
+    ctx.fill();
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Inner shadow
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    ctx.lineTo(pts[1].x, pts[1].y);
+    ctx.lineTo(pts[2].x, pts[2].y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(200,200,200,0.3)';
+    ctx.fill();
+  }
+}
+
+
+// Sunflower bumpers - arranged in neat rows
+const bumpers = [];
+const PLAY_W = LANE_X - 24; // playable width ~436
+// Row 1 - 3 bumpers
+for (let i = 0; i < 3; i++) {
+  bumpers.push(new SunflowerBumper(100 + i * 130, 180, 28));
+}
+// Row 2 - 4 bumpers (offset)
+for (let i = 0; i < 4; i++) {
+  bumpers.push(new SunflowerBumper(50 + i * 110, 270, 26));
+}
+// Row 3 - 3 bumpers
+for (let i = 0; i < 3; i++) {
+  bumpers.push(new SunflowerBumper(100 + i * 130, 360, 24));
+}
+
+// Orange pegs - arranged in neat grid pattern
+const pegs = [];
+// Row between bumper rows
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(65 + i * 110, 225));
+}
+for (let i = 0; i < 3; i++) {
+  pegs.push(new Peg(100 + i * 130, 315));
+}
+// Bottom guide pegs - pyramid pattern
+for (let i = 0; i < 5; i++) {
+  pegs.push(new Peg(60 + i * 90, 420));
+}
+for (let i = 0; i < 6; i++) {
+  pegs.push(new Peg(45 + i * 75, 470));
+}
+for (let i = 0; i < 7; i++) {
+  pegs.push(new Peg(35 + i * 62, 520));
+}
+
+// White triangles - arranged neatly at top
+const triangles = [];
+for (let i = 0; i < 5; i++) {
+  triangles.push(new Triangle(60 + i * 85, 120, 22, 'down'));
+}
+
+
+// Walls - clean frame with arc extending full width
+const walls = [];
+function addWall(x1, y1, x2, y2) { walls.push({x1, y1, x2, y2}); }
+
+const FRAME_LEFT = 12;
+const FRAME_TOP = 55;
+
+// LEFT WALL
+addWall(FRAME_LEFT, FRAME_TOP, FRAME_LEFT, H - SLOT_H);
+
+// TOP ARC - extends FULL WIDTH including over lane area
+// Ball hits arc and bounces into playfield
+const arcStartX = FRAME_LEFT;
+const arcEndX = W - 8;  // Full width to lane outer wall
+const arcCx = (arcStartX + arcEndX) / 2;
+const halfWidth = (arcEndX - arcStartX) / 2;
+const arcHeight = 35;
+
+const arcR = (arcHeight * arcHeight + halfWidth * halfWidth) / (2 * arcHeight);
+const arcCy = FRAME_TOP - arcHeight + arcR;
+
+for (let i = 0; i < 16; i++) {
+  const t1 = i / 16;
+  const t2 = (i + 1) / 16;
+  const x1 = arcStartX + t1 * (arcEndX - arcStartX);
+  const x2 = arcStartX + t2 * (arcEndX - arcStartX);
+  const dx1 = x1 - arcCx;
+  const dx2 = x2 - arcCx;
+  const y1 = arcCy - Math.sqrt(Math.max(0, arcR * arcR - dx1 * dx1));
+  const y2 = arcCy - Math.sqrt(Math.max(0, arcR * arcR - dx2 * dx2));
+  addWall(x1, y1, x2, y2);
+}
+
+// LANE OUTER WALL - right edge, from arc down
+addWall(W - 8, FRAME_TOP, W - 8, H);
+
+function buildSlots() {
+  slots = [];
+  const slotW = (LANE_X - 12) / NUM_GROUPS;
+  for (let i = 0; i < NUM_GROUPS; i++) {
+    slots.push({ x: 12 + i * slotW, w: slotW, idx: i });
+  }
+}
+
+function buildUI() {
+  const nl = document.getElementById('nameList');
+  nl.innerHTML = '';
+  names.forEach((n, i) => {
+    const d = document.createElement('div');
+    d.className = 'name-item';
+    d.id = 'name-' + i;
+    d.textContent = n;
+    nl.appendChild(d);
+  });
+  renderGroups();
+}
+
+function renderGroups() {
+  const gd = document.getElementById('groupsDisplay');
+  gd.innerHTML = '';
+  for (let i = 0; i < NUM_GROUPS; i++) {
+    const lim = groupLimits[i];
+    const box = document.createElement('div');
+    box.className = 'group-box' + (groups[i].length >= lim ? ' full' : '');
+    box.style.borderColor = GROUP_COLORS[i % GROUP_COLORS.length];
+    const title = document.createElement('div');
+    title.className = 'group-title';
+    title.style.color = GROUP_COLORS[i % GROUP_COLORS.length];
+    title.innerHTML = `<span style="width:12px;height:12px;border-radius:50%;background:${GROUP_COLORS[i % GROUP_COLORS.length]};display:inline-block;box-shadow:0 2px 4px rgba(0,0,0,0.2)"></span> 第${i+1}組 (${groups[i].length}/${lim})`;
+    box.appendChild(title);
+    const members = document.createElement('div');
+    members.className = 'group-members';
+    for (let j = 0; j < lim; j++) {
+      const m = document.createElement('div');
+      if (j < groups[i].length) {
+        m.className = 'group-member';
+        m.style.background = GROUP_COLORS[i % GROUP_COLORS.length] + '22';
+        m.style.color = GROUP_COLORS[i % GROUP_COLORS.length];
+        m.textContent = groups[i][j];
+      } else {
+        m.className = 'group-slot-empty';
+        m.textContent = '---';
+      }
+      members.appendChild(m);
+    }
+    box.appendChild(members);
+    gd.appendChild(box);
+  }
+}
+
+// ============ INPUT ============
+const keys = {};
+document.addEventListener('keydown', e => {
+  if (keys[e.code]) return;
+  keys[e.code] = true;
+  if (e.code === 'Space' && currentBall && currentBall.inLane) { isPlunging = true; }
+  if (e.code === 'Space') e.preventDefault();
+});
+document.addEventListener('keyup', e => {
+  keys[e.code] = false;
+  if (e.code === 'Space' && isPlunging) { launchBall(); isPlunging = false; }
+});
+
+// ============ MOUSE/TOUCH SUPPORT ============
+function getCanvasPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = W / rect.width;
+  const scaleY = H / rect.height;
+  let clientX, clientY;
+  if (e.touches && e.touches.length > 0) {
+    clientX = e.touches[0].clientX;
+    clientY = e.touches[0].clientY;
+  } else {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  }
+  return {
+    x: (clientX - rect.left) * scaleX,
+    y: (clientY - rect.top) * scaleY
+  };
+}
+
+function isInPlungerArea(x, y) {
+  // Entire right side lane area is clickable for plunger
+  return x >= LANE_X - 20 && x <= W;
+}
+
+let touchPlunger = false;
+
+canvas.addEventListener('mousedown', handlePointerDown);
+canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
+
+canvas.addEventListener('mouseup', handlePointerUp);
+canvas.addEventListener('touchend', handlePointerUp);
+canvas.addEventListener('mouseleave', handlePointerUp);
+canvas.addEventListener('touchcancel', handlePointerUp);
+
+function handlePointerDown(e) {
+  e.preventDefault();
+  const pos = getCanvasPos(e);
+
+  // Check plunger area (right side)
+  if (isInPlungerArea(pos.x, pos.y)) {
+    if (currentBall && currentBall.inLane) {
+      isPlunging = true;
+      touchPlunger = true;
+    } else if (!currentBall && launchQueue.length > 0) {
+      // Auto launch next ball when clicking plunger with no ball
+      launchNext();
+    }
+  }
+}
+
+function handlePointerUp(e) {
+  if (touchPlunger && isPlunging) {
+    launchBall();
+    isPlunging = false;
+    touchPlunger = false;
+  }
+}
+
+// ============ BALL MANAGEMENT ============
+function launchNext() {
+  if (launchQueue.length === 0 || currentBall) return;
+  gameStarted = true;
+  const idx = launchQueue.shift();
+  document.getElementById('name-' + idx).classList.add('active');
+  currentBall = {
+    x: LANE_X + LANE_W / 2,
+    y: PLUNGER_REST_Y - 14 - BALL_R,
+    vx: 0, vy: 0,
+    nameIdx: idx,
+    inLane: true,
+    landed: false,
+    phase: 'ready', // ready -> sprint -> apex -> plunge
+    apexTimer: 0,
+    trail: [] // for motion trail effect
+  };
+  balls.push(currentBall);
+  plungerPull = 0;
+}
+
+function launchBall() {
+  if (!currentBall || !currentBall.inLane || plungerPull < 5) return;
+  const power = plungerPull / PLUNGER_MAX;
+  // 【起跑：線性衝刺】- Launch with powerful upward velocity
+  currentBall.vy = -1200 - power * 900;
+  currentBall.vx = 0;
+  currentBall.inLane = false;
+  currentBall.phase = 'sprint'; // Begin the sprint phase
+  currentBall.trail = [];
+  playLaunch();
+  plungerPull = 0;
+}
+
+function findAvailableSlot() {
+  const avail = [];
+  for (let i = 0; i < NUM_GROUPS; i++) {
+    if (groups[i].length < groupLimits[i]) avail.push(i);
+  }
+  return avail.length > 0 ? avail[Math.floor(Math.random() * avail.length)] : -1;
+}
+
+function ballLanded(ball, slotIdx) {
+  ball.landed = true;
+  groups[slotIdx].push(names[ball.nameIdx]);
+  const el = document.getElementById('name-' + ball.nameIdx);
+  el.classList.remove('active');
+  el.classList.add('launched');
+  el.style.color = GROUP_COLORS[slotIdx % GROUP_COLORS.length];
+  renderGroups();
+  playLand();
+  currentBall = null;
+
+  if (launchQueue.length === 0 && !balls.some(b => !b.landed)) {
+    setTimeout(showCompletion, 600);
+  }
+}
+
+// ============ PHYSICS ============
+function ptSegDist(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const lenSq = dx*dx + dy*dy;
+  if (lenSq === 0) return { dist: Math.sqrt((px-x1)**2 + (py-y1)**2), nx: px-x1, ny: py-y1 };
+  let t = Math.max(0, Math.min(1, ((px-x1)*dx + (py-y1)*dy) / lenSq));
+  const nx = px - (x1 + t*dx), ny = py - (y1 + t*dy);
+  return { dist: Math.sqrt(nx*nx + ny*ny), nx, ny, t };
+}
+
+function reflect(vx, vy, nx, ny, e) {
+  const dot = vx*nx + vy*ny;
+  return { vx: vx - (1+e)*dot*nx, vy: vy - (1+e)*dot*ny };
+}
+
+function updatePhysics(dt) {
+  // Plunger charge
+  if (isPlunging && currentBall && currentBall.inLane) {
+    plungerPull = Math.min(plungerPull + 150 * dt, PLUNGER_MAX);
+  }
+
+  for (const ball of balls) {
+    if (ball.landed) continue;
+
+    // Store trail positions for motion effect
+    if (ball.trail) {
+      ball.trail.unshift({ x: ball.x, y: ball.y, age: 0 });
+      if (ball.trail.length > 12) ball.trail.pop();
+      ball.trail.forEach(t => t.age += dt);
+    }
+
+    if (ball.inLane) {
+      ball.x = LANE_X + LANE_W / 2;
+      ball.y = PLUNGER_REST_Y + plungerPull - 14 - BALL_R;
+      continue;
+    }
+
+    // === 三段式軌道演義 ===
+
+    // 【起跑：線性衝刺】Sprint phase - ball racing up
+    if (ball.phase === 'sprint') {
+      ball.vy += GRAVITY * 0.6 * dt;
+      // Trigger apex earlier (y < 250) to ensure ball turns before hitting arc
+      if (ball.y < 250) {
+        ball.phase = 'apex';
+        ball.apexTimer = 0.3;
+        ball.vx = -400; // Very strong leftward push!
+        ball.vy = 50; // Start falling immediately
+        playTone(880, 0.1, 'sine', 0.3);
+      }
+    }
+    // 【頂端：拋物線過渡】Apex phase - curve into playfield
+    else if (ball.phase === 'apex') {
+      ball.apexTimer -= dt;
+      ball.vy += GRAVITY * 0.6 * dt;
+      // Keep pushing left
+      if (ball.x > LANE_X) {
+        ball.vx = Math.min(ball.vx, -350);
+      }
+      if (ball.apexTimer <= 0) {
+        ball.phase = 'plunge';
+        playTone(440, 0.15, 'triangle', 0.4);
+      }
+    }
+    // 【落下：重力回歸】Plunge phase - full gravity descent
+    else {
+      ball.vy += GRAVITY * dt;
+    }
+
+    ball.vx *= 0.998;
+    ball.vy *= 0.998;
+
+    const subDt = dt / SUBSTEPS;
+    for (let s = 0; s < SUBSTEPS; s++) {
+      ball.x += ball.vx * subDt;
+      ball.y += ball.vy * subDt;
+
+      // Walls
+      for (const w of walls) {
+        const info = ptSegDist(ball.x, ball.y, w.x1, w.y1, w.x2, w.y2);
+        if (info.dist < BALL_R) {
+          const len = info.dist || 0.001;
+          const nx = info.nx / len, ny = info.ny / len;
+          ball.x += nx * (BALL_R - info.dist);
+          ball.y += ny * (BALL_R - info.dist);
+          const r = reflect(ball.vx, ball.vy, nx, ny, WALL_REST);
+          ball.vx = r.vx; ball.vy = r.vy;
+        }
+      }
+
+      // Bumpers
+      for (const b of bumpers) {
+        const dx = ball.x - b.x, dy = ball.y - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < BALL_R + b.r) {
+          const nx = dx/dist, ny = dy/dist;
+          ball.x = b.x + nx * (BALL_R + b.r + 1);
+          ball.y = b.y + ny * (BALL_R + b.r + 1);
+          const r = reflect(ball.vx, ball.vy, nx, ny, BUMPER_REST);
+          ball.vx = r.vx; ball.vy = r.vy;
+          const spd = Math.sqrt(ball.vx**2 + ball.vy**2);
+          if (spd < 350) { ball.vx *= 350/spd; ball.vy *= 350/spd; }
+          b.flash = 10;
+          b.rotation += 0.2;
+          // First collision triggers plunge phase
+          if (ball.phase !== 'plunge') ball.phase = 'plunge';
+          playBumper();
+        }
+      }
+
+      // Pegs
+      for (const p of pegs) {
+        const dx = ball.x - p.x, dy = ball.y - p.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < BALL_R + p.r) {
+          const nx = dx/dist, ny = dy/dist;
+          ball.x = p.x + nx * (BALL_R + p.r + 1);
+          ball.y = p.y + ny * (BALL_R + p.r + 1);
+          const r = reflect(ball.vx, ball.vy, nx, ny, PEG_REST);
+          ball.vx = r.vx; ball.vy = r.vy;
+          p.flash = 6;
+          playPeg();
+        }
+      }
+
+      // Triangles - 第一道防線
+      for (const tri of triangles) {
+        const edges = tri.getEdges();
+        for (let i = 0; i < edges.length; i++) {
+          const [p1, p2] = edges[i];
+          const info = ptSegDist(ball.x, ball.y, p1.x, p1.y, p2.x, p2.y);
+          if (info.dist < BALL_R) {
+            const len = info.dist || 0.001;
+            const nx = info.nx / len, ny = info.ny / len;
+            ball.x += nx * (BALL_R - info.dist);
+            ball.y += ny * (BALL_R - info.dist);
+            const r = reflect(ball.vx, ball.vy, nx, ny, WALL_REST);
+            ball.vx = r.vx; ball.vy = r.vy;
+            tri.flash = 6;
+            // 正式「入侵」財富迷宮
+            if (ball.phase !== 'plunge') ball.phase = 'plunge';
+            playTriangle();
+            break;
+          }
+        }
+      }
+
+      // Slot landing
+      const slotTop = H - SLOT_H;
+      if (ball.y + BALL_R >= slotTop && ball.x >= 12 && ball.x < LANE_X) {
+        let slotIdx = Math.floor((ball.x - 12) / ((LANE_X - 12) / NUM_GROUPS));
+        slotIdx = Math.max(0, Math.min(NUM_GROUPS - 1, slotIdx));
+        if (groups[slotIdx].length >= groupLimits[slotIdx]) {
+          slotIdx = findAvailableSlot();
+        }
+        if (slotIdx >= 0) {
+          ball.x = slots[slotIdx].x + slots[slotIdx].w / 2;
+          ball.y = slotTop + SLOT_H / 2;
+          ballLanded(ball, slotIdx);
+          break;
+        }
+      }
+
+      // Drain (ball goes off screen - shouldn't happen in pachinko)
+      if (ball.y > H + BALL_R * 2) {
+        // Ball lost - respawn
+        ball.landed = true;
+        document.getElementById('name-' + ball.nameIdx).classList.remove('active');
+        launchQueue.unshift(ball.nameIdx); // Put back in queue
+        currentBall = null;
+      }
+
+      // Top bound - only prevent going off-screen, let walls handle bouncing
+      if (ball.y < BALL_R + 8) {
+        ball.y = BALL_R + 8;
+        ball.vy = Math.abs(ball.vy) * 0.5;
+        // Trigger apex phase if still sprinting
+        if (ball.phase === 'sprint') {
+          ball.phase = 'apex';
+          ball.apexTimer = 0.15;
+          ball.vx = -150; // Push ball LEFT toward playfield
+          playTone(880, 0.1, 'sine', 0.3);
+        }
+      }
+    }
+  }
+}
+
+// ============ DRAWING ============
+function draw() {
+  // Blue gradient background
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+  bgGrad.addColorStop(0, '#3d5a80');
+  bgGrad.addColorStop(0.5, '#4a7ab0');
+  bgGrad.addColorStop(1, '#3d5a80');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle grid pattern
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 35) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 35) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // Golden frame effect (inner)
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(6, 6, W - 12, H - 12);
+
+  // Walls - golden style
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  for (const w of walls) {
+    ctx.beginPath(); ctx.moveTo(w.x1, w.y1); ctx.lineTo(w.x2, w.y2); ctx.stroke();
+  }
+  // Wall highlight
+  ctx.strokeStyle = '#ffdd88';
+  ctx.lineWidth = 2;
+  for (const w of walls) {
+    ctx.beginPath(); ctx.moveTo(w.x1, w.y1); ctx.lineTo(w.x2, w.y2); ctx.stroke();
+  }
+
+  // Launch lane - shorter, only bottom portion
+  const LANE_VISUAL_TOP = 320;  // Match wall LANE_TOP
+  const laneGrad = ctx.createLinearGradient(LANE_X, 0, LANE_X + LANE_W, 0);
+  laneGrad.addColorStop(0, '#1a3050');
+  laneGrad.addColorStop(0.3, '#2a4570');
+  laneGrad.addColorStop(0.7, '#2a4570');
+  laneGrad.addColorStop(1, '#1a3050');
+  ctx.fillStyle = laneGrad;
+  ctx.fillRect(LANE_X, LANE_VISUAL_TOP, LANE_W, H - LANE_VISUAL_TOP + 5);
+
+  // Lane inner glow lines
+  ctx.strokeStyle = 'rgba(255, 200, 100, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(LANE_X + 4, LANE_VISUAL_TOP + 10);
+  ctx.lineTo(LANE_X + 4, H - 60);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(LANE_X + LANE_W - 4, LANE_VISUAL_TOP + 10);
+  ctx.lineTo(LANE_X + LANE_W - 4, H - 60);
+  ctx.stroke();
+
+  // Lane borders - golden frame
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(LANE_X, LANE_VISUAL_TOP, LANE_W, H - LANE_VISUAL_TOP + 5);
+
+  // Upward arrows showing launch direction
+  ctx.fillStyle = 'rgba(255, 220, 100, 0.6)';
+  ctx.font = 'bold 16px sans-serif';
+  ctx.textAlign = 'center';
+  const arrowY = LANE_VISUAL_TOP + 30 + (Date.now() % 1000) / 1000 * 20;
+  for (let i = 0; i < 3; i++) {
+    const alpha = 0.8 - i * 0.25;
+    ctx.fillStyle = `rgba(255, 220, 100, ${alpha})`;
+    ctx.fillText('▲', LANE_X + LANE_W/2, arrowY + i * 25);
+  }
+
+  // Plunger
+  const plY = PLUNGER_REST_Y + plungerPull;
+  // Spring coils
+  ctx.strokeStyle = '#888';
+  ctx.lineWidth = 3;
+  const sTop = plY + 14, sBot = H - 18;
+  const coils = 5;
+  ctx.beginPath();
+  for (let i = 0; i <= coils; i++) {
+    const y = sTop + (sBot - sTop) * i / coils;
+    const x = LANE_X + LANE_W/2 + (i % 2 === 0 ? -6 : 6);
+    if (i === 0) ctx.moveTo(LANE_X + LANE_W/2, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.lineTo(LANE_X + LANE_W/2, sBot);
+  ctx.stroke();
+
+  // Plunger head
+  ctx.beginPath();
+  ctx.arc(LANE_X + LANE_W/2, plY, 12, 0, Math.PI*2);
+  const pg = ctx.createRadialGradient(LANE_X + LANE_W/2 - 3, plY - 3, 0, LANE_X + LANE_W/2, plY, 12);
+  pg.addColorStop(0, '#4caf50');
+  pg.addColorStop(0.5, '#388e3c');
+  pg.addColorStop(1, '#1b5e20');
+  ctx.fillStyle = pg;
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Power bar
+  if (isPlunging && plungerPull > 0) {
+    const pct = plungerPull / PLUNGER_MAX;
+    const barGrad = ctx.createLinearGradient(LANE_X + 4, 0, LANE_X + LANE_W - 4, 0);
+    barGrad.addColorStop(0, '#4caf50');
+    barGrad.addColorStop(0.5, '#ffeb3b');
+    barGrad.addColorStop(1, '#f44336');
+    ctx.fillStyle = barGrad;
+    ctx.fillRect(LANE_X + 4, PLUNGER_REST_Y - 65, (LANE_W - 8) * pct, 6);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(LANE_X + 4, PLUNGER_REST_Y - 65, LANE_W - 8, 6);
+  }
+
+  // Slots with multiplier style
+  const slotTop = H - SLOT_H;
+  ctx.fillStyle = 'rgba(30,60,100,0.8)';
+  ctx.fillRect(12, slotTop, LANE_X - 12, SLOT_H);
+
+  // Slot borders
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(12, slotTop, LANE_X - 12, SLOT_H);
+
+  for (let i = 0; i < NUM_GROUPS; i++) {
+    const s = slots[i];
+    // Slot background with color tint
+    ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length] + '20';
+    ctx.fillRect(s.x, slotTop, s.w, SLOT_H);
+
+    // Dividers
+    if (i > 0) {
+      ctx.strokeStyle = '#d4a530';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(s.x, slotTop); ctx.lineTo(s.x, H); ctx.stroke();
+    }
+
+    // Slot labels - Royal Match multiplier style
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 11px "Noto Sans TC"';
+    ctx.textAlign = 'center';
+    ctx.fillText(`第${i+1}組`, s.x + s.w/2, slotTop + 16);
+
+    // Count indicator
+    ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length];
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText(`${groups[i].length}/${groupLimits[i]}`, s.x + s.w/2, slotTop + 35);
+  }
+
+  // Draw triangles
+  for (const tri of triangles) tri.draw();
+
+  // Draw pegs
+  for (const p of pegs) p.draw();
+
+  // Draw bumpers (sunflowers)
+  for (const b of bumpers) b.draw();
+
+  // Balls - purple/magenta style with motion trail
+  for (const ball of balls) {
+    if (ball.landed) continue;
+
+    // Draw motion trail
+    if (ball.trail && ball.trail.length > 1 && !ball.inLane) {
+      for (let i = 1; i < ball.trail.length; i++) {
+        const t = ball.trail[i];
+        const alpha = Math.max(0, 0.4 - i * 0.035);
+        const size = BALL_R * (1 - i * 0.08);
+        if (size > 2) {
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, size, 0, Math.PI * 2);
+          // Color based on phase
+          if (ball.phase === 'sprint') {
+            ctx.fillStyle = `rgba(255, 200, 100, ${alpha})`; // Golden trail for sprint
+          } else if (ball.phase === 'apex') {
+            ctx.fillStyle = `rgba(255, 255, 200, ${alpha})`; // White glow at apex
+          } else {
+            ctx.fillStyle = `rgba(224, 64, 251, ${alpha})`; // Purple trail for plunge
+          }
+          ctx.fill();
+        }
+      }
+    }
+
+    // Glow effect during sprint phase
+    if (ball.phase === 'sprint' && !ball.inLane) {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, BALL_R + 6, 0, Math.PI * 2);
+      const glow = ctx.createRadialGradient(ball.x, ball.y, BALL_R, ball.x, ball.y, BALL_R + 8);
+      glow.addColorStop(0, 'rgba(255, 200, 100, 0.6)');
+      glow.addColorStop(1, 'rgba(255, 200, 100, 0)');
+      ctx.fillStyle = glow;
+      ctx.fill();
+    }
+
+    // Apex glow - bright white halo
+    if (ball.phase === 'apex') {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, BALL_R + 10, 0, Math.PI * 2);
+      const glow = ctx.createRadialGradient(ball.x, ball.y, BALL_R, ball.x, ball.y, BALL_R + 12);
+      glow.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+      glow.addColorStop(0.5, 'rgba(255, 220, 100, 0.4)');
+      glow.addColorStop(1, 'rgba(255, 200, 100, 0)');
+      ctx.fillStyle = glow;
+      ctx.fill();
+    }
+
+    // Main ball
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI*2);
+    const bg = ctx.createRadialGradient(ball.x - 3, ball.y - 3, 0, ball.x, ball.y, BALL_R);
+    if (ball.phase === 'sprint') {
+      // Golden ball during sprint
+      bg.addColorStop(0, '#fff');
+      bg.addColorStop(0.3, '#ffd700');
+      bg.addColorStop(0.7, '#ff9900');
+      bg.addColorStop(1, '#cc6600');
+    } else if (ball.phase === 'apex') {
+      // Bright white at apex
+      bg.addColorStop(0, '#fff');
+      bg.addColorStop(0.3, '#fff5dd');
+      bg.addColorStop(0.7, '#ffd700');
+      bg.addColorStop(1, '#ffaa00');
+    } else {
+      // Purple during plunge
+      bg.addColorStop(0, '#fff');
+      bg.addColorStop(0.3, '#e040fb');
+      bg.addColorStop(0.7, '#9c27b0');
+      bg.addColorStop(1, '#6a1b9a');
+    }
+    ctx.fillStyle = bg;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Name on ball (only during plunge or when slower)
+    if (!ball.inLane && ball.phase !== 'sprint') {
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 8px "Noto Sans TC"';
+      ctx.textAlign = 'center';
+      const n = names[ball.nameIdx];
+      ctx.fillText(n.length > 3 ? n.slice(0,2)+'..' : n, ball.x, ball.y + 3);
+    }
+  }
+
+  // Score/info display - Royal Match style
+  ctx.fillStyle = 'rgba(0,50,100,0.7)';
+  ctx.beginPath();
+  ctx.roundRect(W/2 - 60, 8, 120, 28, 10);
+  ctx.fill();
+  ctx.strokeStyle = '#ffd700';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Next indicator or remaining count
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 12px "Noto Sans TC"';
+  ctx.textAlign = 'center';
+  if (launchQueue.length > 0 && !currentBall) {
+    ctx.fillText(`下一位: ${names[launchQueue[0]]}`, W/2, 27);
+  } else {
+    ctx.fillText(`剩餘: ${launchQueue.length}/${names.length}`, W/2, 27);
+  }
+}
+
+// ============ GAME CONTROL ============
+function toggleAuto() {
+  autoMode = !autoMode;
+  const btn = document.getElementById('btnAuto');
+  if (autoMode) {
+    btn.textContent = '停止自動';
+    btn.style.background = 'linear-gradient(135deg, #f44336, #c62828)';
+    runAuto();
+  } else {
+    btn.textContent = '自動發射';
+    btn.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+    if (autoTimer) clearTimeout(autoTimer);
+  }
+}
+
+function runAuto() {
+  if (!autoMode) return;
+  if (launchQueue.length === 0) {
+    autoMode = false;
+    document.getElementById('btnAuto').textContent = '自動發射';
+    document.getElementById('btnAuto').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+    return;
+  }
+  if (!currentBall) {
+    launchNext();
+    setTimeout(() => {
+      if (currentBall && currentBall.inLane) {
+        plungerPull = PLUNGER_MAX * (0.6 + Math.random() * 0.4);
+        setTimeout(() => { launchBall(); setTimeout(runAuto, 1000); }, 350);
+      }
+    }, 250);
+  } else {
+    autoTimer = setTimeout(runAuto, 600);
+  }
+}
+
+function showCompletion() {
+  playComplete();
+  const lines = [];
+  for (let i = 0; i < NUM_GROUPS; i++) {
+    lines.push(`🏆 第${i+1}組：${groups[i].join('、') || '(空)'}`);
+  }
+  document.getElementById('completionText').innerHTML = lines.join('<br>');
+  document.getElementById('completionOverlay').classList.add('show');
+}
+
+function resetGame() {
+  autoMode = false;
+  if (autoTimer) clearTimeout(autoTimer);
+  document.getElementById('btnAuto').textContent = '自動發射';
+  document.getElementById('btnAuto').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+  syncNamesAndReset();
+}
+
+// ============ GAME LOOP ============
+function gameLoop(ts) {
+  if (lastTime === 0) lastTime = ts;
+  const dt = Math.min((ts - lastTime) / 1000, 0.05);
+  lastTime = ts;
+
+  updatePhysics(dt);
+  draw();
+
+  requestAnimationFrame(gameLoop);
+}
+
+// ============ INIT ============
+buildSlots();
+syncNamesAndReset();
+requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>
