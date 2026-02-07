@@ -7,7 +7,10 @@
       "Bash(lsof:*)",
       "Bash(xargs kill -9)",
       "Bash(python app.py:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git remote set-url:*)"
     ],
     "deny": [],
     "ask": []
