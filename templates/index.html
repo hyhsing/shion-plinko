@@ -553,26 +553,30 @@ const walls = [];
 function addWall(x1, y1, x2, y2) { walls.push({x1, y1, x2, y2}); }
 
 const FRAME_LEFT = 12;
-const FRAME_TOP = 55;
+const FRAME_TOP = 80;  // Moved arc down
 
 // LEFT WALL
 addWall(FRAME_LEFT, FRAME_TOP, FRAME_LEFT, H - SLOT_H);
 
-// TOP ARC - 180 degree semicircle from left to lane outer wall
+// TOP ARC - goes from left all the way to lane outer wall (W-8)
 const arcStartX = FRAME_LEFT;
 const arcEndX = W - 8;  // Connects to lane RIGHT side!
 const arcCx = (arcStartX + arcEndX) / 2;
-const arcR = (arcEndX - arcStartX) / 2;  // True semicircle: radius = half width
-const arcCy = FRAME_TOP;  // Center at frame top
+const halfWidth = (arcEndX - arcStartX) / 2;
+const arcHeight = 50;
 
-// Draw 180 degree arc (from PI to 0, which is left to right on top)
+const arcR = (arcHeight * arcHeight + halfWidth * halfWidth) / (2 * arcHeight);
+const arcCy = FRAME_TOP - arcHeight + arcR;
+
 for (let i = 0; i < 16; i++) {
-  const angle1 = Math.PI - (i / 16) * Math.PI;
-  const angle2 = Math.PI - ((i + 1) / 16) * Math.PI;
-  const x1 = arcCx + Math.cos(angle1) * arcR;
-  const y1 = arcCy - Math.sin(angle1) * arcR;
-  const x2 = arcCx + Math.cos(angle2) * arcR;
-  const y2 = arcCy - Math.sin(angle2) * arcR;
+  const t1 = i / 16;
+  const t2 = (i + 1) / 16;
+  const x1 = arcStartX + t1 * (arcEndX - arcStartX);
+  const x2 = arcStartX + t2 * (arcEndX - arcStartX);
+  const dx1 = x1 - arcCx;
+  const dx2 = x2 - arcCx;
+  const y1 = arcCy - Math.sqrt(Math.max(0, arcR * arcR - dx1 * dx1));
+  const y2 = arcCy - Math.sqrt(Math.max(0, arcR * arcR - dx2 * dx2));
   addWall(x1, y1, x2, y2);
 }
 
