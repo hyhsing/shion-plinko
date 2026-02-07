@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>龍巢寶藏 - 彈珠台分組</title>
+<title>Shion 分組彈珠台</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@700;900&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -172,7 +172,7 @@
 </div>
 
 <div class="header">
-  <h1>🐉 龍巢寶藏 🐉</h1>
+  <h1>🎱 Shion 分組彈珠台 🎱</h1>
   <div class="header-sub">DRAGON NEST PINBALL GROUPING</div>
 </div>
 
@@ -338,7 +338,7 @@ const PEG_REST = 0.55;
 
 // Layout
 const SLOT_H = 55;
-const LANE_W = 50;  // 配合大球
+const LANE_W = 34;  // 配合縮小的球
 const LANE_X = W - LANE_W - 8;
 const PLUNGER_REST_Y = H - 50;
 const PLUNGER_MAX = 60;
@@ -512,39 +512,51 @@ const PLAY_W = LANE_X - 24; // playable width ~436
 // 橘色圓釘 - 交錯排列，包含左右牆邊
 const pegs = [];
 const PEG_AREA_LEFT = 50;
-const PEG_AREA_RIGHT = LANE_X - 40;
+const PEG_AREA_RIGHT = LANE_X - 30;
 const PEG_AREA_WIDTH = PEG_AREA_RIGHT - PEG_AREA_LEFT;
-const ROW_SPACING = 70;
+const ROW_SPACING = 45;  // 縮小間距配合小球
 
 // 左側牆邊釘子 - 阻擋順牆滑落
-pegs.push(new Peg(25, 300));
-pegs.push(new Peg(25, 380));
+pegs.push(new Peg(25, 280));
+pegs.push(new Peg(25, 340));
+pegs.push(new Peg(25, 400));
 pegs.push(new Peg(25, 460));
+pegs.push(new Peg(25, 520));
 
 // 右側牆邊釘子 - 阻擋順牆滑落
-pegs.push(new Peg(LANE_X - 25, 300));
-pegs.push(new Peg(LANE_X - 25, 380));
-pegs.push(new Peg(LANE_X - 25, 460));
+pegs.push(new Peg(LANE_X - 20, 280));
+pegs.push(new Peg(LANE_X - 20, 340));
+pegs.push(new Peg(LANE_X - 20, 400));
+pegs.push(new Peg(LANE_X - 20, 460));
+pegs.push(new Peg(LANE_X - 20, 520));
 
-// Row 1 - 3 pegs
-for (let i = 0; i < 3; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 3), 270));
+// Row 1 - 4 pegs
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 260));
 }
-// Row 2 - 2 pegs (交錯在中間)
-for (let i = 0; i < 2; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 1) * (PEG_AREA_WIDTH / 3), 330));
+// Row 2 - 5 pegs (交錯)
+for (let i = 0; i < 5; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 305));
 }
-// Row 3 - 3 pegs
-for (let i = 0; i < 3; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 3), 390));
+// Row 3 - 4 pegs
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 350));
 }
-// Row 4 - 2 pegs (交錯)
-for (let i = 0; i < 2; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 1) * (PEG_AREA_WIDTH / 3), 450));
+// Row 4 - 5 pegs (交錯)
+for (let i = 0; i < 5; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 395));
 }
-// Row 5 - 3 pegs
-for (let i = 0; i < 3; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 3), 510));
+// Row 5 - 4 pegs
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 440));
+}
+// Row 6 - 5 pegs (交錯)
+for (let i = 0; i < 5; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 485));
+}
+// Row 7 - 4 pegs
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 530));
 }
 
 // 白色三角形障礙物 - 暫時移除
@@ -683,6 +695,9 @@ function isInPlungerArea(x, y) {
 
 let touchPlunger = false;
 
+// 點擊效果陣列
+const clickEffects = [];
+
 canvas.addEventListener('mousedown', handlePointerDown);
 canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
 
@@ -704,7 +719,47 @@ function handlePointerDown(e) {
       // Auto launch next ball when clicking plunger with no ball
       launchNext();
     }
+  } else {
+    // 點擊球場區域 - 產生視覺效果並干擾球
+    createClickEffect(pos.x, pos.y);
   }
+}
+
+// 創建點擊效果並干擾附近的球
+function createClickEffect(x, y) {
+  // 添加視覺漣漪效果
+  clickEffects.push({
+    x: x,
+    y: y,
+    radius: 10,
+    maxRadius: 60,
+    alpha: 1,
+    color: '#ffdd88'
+  });
+
+  // 干擾附近的球
+  const pushRadius = 80;  // 影響範圍
+  const pushForce = 200;  // 推力強度
+
+  for (const ball of balls) {
+    if (ball.landed || ball.inLane) continue;
+
+    const dx = ball.x - x;
+    const dy = ball.y - y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < pushRadius && dist > 0) {
+      // 根據距離計算推力（越近越強）
+      const force = pushForce * (1 - dist / pushRadius);
+      const nx = dx / dist;
+      const ny = dy / dist;
+      ball.vx += nx * force;
+      ball.vy += ny * force;
+    }
+  }
+
+  // 播放音效
+  playPeg();
 }
 
 function handlePointerUp(e) {
@@ -747,6 +802,8 @@ function launchBall() {
   currentBall.trail = [];
   playLaunch();
   plungerPull = 0;
+  // 立即允許下一顆發射
+  currentBall = null;
 }
 
 function findAvailableSlot() {
@@ -766,7 +823,6 @@ function ballLanded(ball, slotIdx) {
   el.style.color = GROUP_COLORS[slotIdx % GROUP_COLORS.length];
   renderGroups();
   playLand();
-  currentBall = null;
 
   if (launchQueue.length === 0 && !balls.some(b => !b.landed)) {
     setTimeout(showCompletion, 600);
@@ -885,6 +941,38 @@ function updatePhysics(dt) {
           ball.vx = r.vx; ball.vy = r.vy;
           p.flash = 6;
           playPeg();
+        }
+      }
+
+      // 球與球碰撞
+      for (const other of balls) {
+        if (other === ball || other.landed || other.inLane) continue;
+        if (ball.inLane) continue;
+        const dx = ball.x - other.x;
+        const dy = ball.y - other.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const minDist = BALL_R * 2;
+        if (dist < minDist && dist > 0) {
+          // 分離兩球
+          const nx = dx / dist;
+          const ny = dy / dist;
+          const overlap = (minDist - dist) / 2;
+          ball.x += nx * overlap;
+          ball.y += ny * overlap;
+          other.x -= nx * overlap;
+          other.y -= ny * overlap;
+          // 彈性碰撞 - 交換速度分量
+          const relVx = ball.vx - other.vx;
+          const relVy = ball.vy - other.vy;
+          const relDot = relVx * nx + relVy * ny;
+          if (relDot < 0) {
+            const restitution = 0.8;
+            ball.vx -= restitution * relDot * nx;
+            ball.vy -= restitution * relDot * ny;
+            other.vx += restitution * relDot * nx;
+            other.vy += restitution * relDot * ny;
+            playPeg();
+          }
         }
       }
 
@@ -1097,8 +1185,23 @@ function draw() {
   for (let i = 0; i < NUM_GROUPS; i++) {
     const s = slots[i];
     // Slot background with color tint
-    ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length] + '20';
-    ctx.fillRect(s.x, slotTop, s.w, SLOT_H);
+    const isFull = groups[i].length >= groupLimits[i];
+
+    // 滿了就填滿視覺效果
+    if (isFull) {
+      ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length] + '80';  // 較深的顏色
+      ctx.fillRect(s.x, slotTop, s.w, SLOT_H);
+      // 添加閃光效果
+      const gradient = ctx.createLinearGradient(s.x, slotTop, s.x, slotTop + SLOT_H);
+      gradient.addColorStop(0, 'rgba(255,255,255,0.3)');
+      gradient.addColorStop(0.5, 'rgba(255,255,255,0)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0.1)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(s.x, slotTop, s.w, SLOT_H);
+    } else {
+      ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length] + '20';
+      ctx.fillRect(s.x, slotTop, s.w, SLOT_H);
+    }
 
     // Dividers
     if (i > 0) {
@@ -1108,19 +1211,53 @@ function draw() {
     }
 
     // Slot labels - Royal Match multiplier style
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = isFull ? '#fff' : '#fff';
     ctx.font = 'bold 11px "Noto Sans TC"';
     ctx.textAlign = 'center';
     ctx.fillText(`第${i+1}組`, s.x + s.w/2, slotTop + 16);
 
-    // Count indicator
-    ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length];
-    ctx.font = 'bold 14px sans-serif';
-    ctx.fillText(`${groups[i].length}/${groupLimits[i]}`, s.x + s.w/2, slotTop + 35);
+    // Count indicator 或 滿了顯示 ✓
+    if (isFull) {
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText('✓ 已滿', s.x + s.w/2, slotTop + 38);
+    } else {
+      ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length];
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText(`${groups[i].length}/${groupLimits[i]}`, s.x + s.w/2, slotTop + 35);
+    }
   }
 
   // Draw triangles
   for (const tri of triangles) tri.draw();
+
+  // Draw click effects (漣漪效果)
+  for (let i = clickEffects.length - 1; i >= 0; i--) {
+    const effect = clickEffects[i];
+    ctx.beginPath();
+    ctx.arc(effect.x, effect.y, effect.radius, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(255, 221, 136, ${effect.alpha})`;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // 內圈
+    if (effect.radius > 20) {
+      ctx.beginPath();
+      ctx.arc(effect.x, effect.y, effect.radius * 0.5, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255, 255, 255, ${effect.alpha * 0.5})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // 更新效果
+    effect.radius += 3;
+    effect.alpha -= 0.03;
+
+    // 移除消失的效果
+    if (effect.alpha <= 0 || effect.radius >= effect.maxRadius) {
+      clickEffects.splice(i, 1);
+    }
+  }
 
   // Draw pegs
   for (const p of pegs) p.draw();
