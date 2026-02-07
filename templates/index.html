@@ -179,6 +179,9 @@
 <div class="settings-bar">
   <label>組數:</label>
   <input type="number" id="numGroups" value="6" min="2" max="12" onchange="onGroupsChange()">
+  <label>每組人數:</label>
+  <input type="range" id="perGroupSlider" min="1" max="10" value="5" style="width:80px;accent-color:#d4a530" oninput="onPerGroupChange(this.value)">
+  <span id="perGroupValue" style="font-weight:bold;color:#2d5a87;min-width:20px">5</span>
   <label>🔊</label>
   <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width:60px;accent-color:#ff4081" oninput="setVolume(this.value)">
 </div>
@@ -307,7 +310,8 @@ function syncNamesAndReset() {
   NUM_GROUPS = parseInt(document.getElementById('numGroups').value) || 6;
   names = customNames.length > 0 ? [...customNames] : [...DEFAULT_NAMES];
   if (NUM_GROUPS > names.length) NUM_GROUPS = names.length;
-  const perGroup = Math.ceil(names.length / NUM_GROUPS);
+  // 使用 slider 的值來設定每組人數
+  const perGroup = parseInt(document.getElementById('perGroupSlider').value) || 5;
   groupLimits = Array(NUM_GROUPS).fill(perGroup);
   groups = Array.from({length: NUM_GROUPS}, () => []);
   buildSlots();
@@ -320,6 +324,11 @@ function syncNamesAndReset() {
   document.getElementById('btnLaunch').disabled = false;
 }
 function onGroupsChange() { syncNamesAndReset(); renderNameTags(); }
+function onPerGroupChange(val) {
+  document.getElementById('perGroupValue').textContent = val;
+  syncNamesAndReset();
+  renderNameTags();
+}
 function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } }
 
 // ============ CANVAS & PHYSICS ============
