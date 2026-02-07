@@ -611,19 +611,15 @@ const PEG_AREA_RIGHT = LANE_X - 30;
 const PEG_AREA_WIDTH = PEG_AREA_RIGHT - PEG_AREA_LEFT;
 const ROW_SPACING = 45;  // 縮小間距配合小球
 
-// 左側牆邊釘子 - 阻擋順牆滑落
-pegs.push(new Peg(25, 280));
-pegs.push(new Peg(25, 340));
-pegs.push(new Peg(25, 400));
-pegs.push(new Peg(25, 460));
-pegs.push(new Peg(25, 520));
+// 左側牆邊釘子 - 阻擋順牆滑落 (間距加大)
+pegs.push(new Peg(25, 290));
+pegs.push(new Peg(25, 390));
+pegs.push(new Peg(25, 490));
 
-// 右側牆邊釘子 - 阻擋順牆滑落
-pegs.push(new Peg(LANE_X - 20, 280));
-pegs.push(new Peg(LANE_X - 20, 340));
-pegs.push(new Peg(LANE_X - 20, 400));
-pegs.push(new Peg(LANE_X - 20, 460));
-pegs.push(new Peg(LANE_X - 20, 520));
+// 右側牆邊釘子 - 阻擋順牆滑落 (間距加大)
+pegs.push(new Peg(LANE_X - 20, 290));
+pegs.push(new Peg(LANE_X - 20, 390));
+pegs.push(new Peg(LANE_X - 20, 490));
 
 // Row 1 - 4 pegs
 for (let i = 0; i < 4; i++) {
