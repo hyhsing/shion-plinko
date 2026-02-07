@@ -548,23 +548,23 @@ for (let i = 0; i < 5; i++) {
 }
 
 
-// Walls - clean frame with arc extending full width
+// Walls - frame with rounder arc and proper lane walls
 const walls = [];
 function addWall(x1, y1, x2, y2) { walls.push({x1, y1, x2, y2}); }
 
 const FRAME_LEFT = 12;
 const FRAME_TOP = 55;
+const LANE_WALL_TOP = 200;  // Lane walls start here (taller lane)
 
 // LEFT WALL
 addWall(FRAME_LEFT, FRAME_TOP, FRAME_LEFT, H - SLOT_H);
 
-// TOP ARC - extends FULL WIDTH including over lane area
-// Ball hits arc and bounces into playfield
+// TOP ARC - more rounded (higher arcHeight)
 const arcStartX = FRAME_LEFT;
-const arcEndX = W - 8;  // Full width to lane outer wall
+const arcEndX = W - 8;
 const arcCx = (arcStartX + arcEndX) / 2;
 const halfWidth = (arcEndX - arcStartX) / 2;
-const arcHeight = 35;
+const arcHeight = 50;  // More rounded arc!
 
 const arcR = (arcHeight * arcHeight + halfWidth * halfWidth) / (2 * arcHeight);
 const arcCy = FRAME_TOP - arcHeight + arcR;
@@ -581,7 +581,10 @@ for (let i = 0; i < 16; i++) {
   addWall(x1, y1, x2, y2);
 }
 
-// LANE OUTER WALL - right edge, from arc down
+// LANE LEFT WALL - prevents balls from bouncing back into lane
+addWall(LANE_X, LANE_WALL_TOP, LANE_X, H - SLOT_H);
+
+// LANE OUTER WALL - right edge
 addWall(W - 8, FRAME_TOP, W - 8, H);
 
 function buildSlots() {
@@ -806,26 +809,16 @@ function updatePhysics(dt) {
 
     // === 三段式軌道演義 ===
 
-    // 【起跑：線性衝刺】Sprint phase - ball racing up
+    // 【起跑：線性衝刺】Sprint phase - ball racing up the lane
     if (ball.phase === 'sprint') {
-      ball.vy += GRAVITY * 0.6 * dt;
-      // Trigger apex earlier (y < 250) to ensure ball turns before hitting arc
-      if (ball.y < 250) {
-        ball.phase = 'apex';
-        ball.apexTimer = 0.3;
-        ball.vx = -400; // Very strong leftward push!
-        ball.vy = 50; // Start falling immediately
-        playTone(880, 0.1, 'sine', 0.3);
-      }
+      ball.vy += GRAVITY * 0.5 * dt;  // Slightly reduced gravity
+      // Ball will hit the arc and naturally bounce into playfield
+      // The arc's curve will deflect the ball leftward
     }
-    // 【頂端：拋物線過渡】Apex phase - curve into playfield
+    // 【頂端：滯空轉向】Apex phase - triggered by hitting arc
     else if (ball.phase === 'apex') {
       ball.apexTimer -= dt;
-      ball.vy += GRAVITY * 0.6 * dt;
-      // Keep pushing left
-      if (ball.x > LANE_X) {
-        ball.vx = Math.min(ball.vx, -350);
-      }
+      ball.vy += GRAVITY * 0.5 * dt;
       if (ball.apexTimer <= 0) {
         ball.phase = 'plunge';
         playTone(440, 0.15, 'triangle', 0.4);
@@ -990,8 +983,8 @@ function draw() {
     ctx.beginPath(); ctx.moveTo(w.x1, w.y1); ctx.lineTo(w.x2, w.y2); ctx.stroke();
   }
 
-  // Launch lane - shorter, only bottom portion
-  const LANE_VISUAL_TOP = 320;  // Match wall LANE_TOP
+  // Launch lane - taller now
+  const LANE_VISUAL_TOP = 200;  // Match wall LANE_WALL_TOP
   const laneGrad = ctx.createLinearGradient(LANE_X, 0, LANE_X + LANE_W, 0);
   laneGrad.addColorStop(0, '#1a3050');
   laneGrad.addColorStop(0.3, '#2a4570');
