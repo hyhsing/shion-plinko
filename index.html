@@ -3,648 +3,231 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>新春彈珠台分組</title>
+<title>Shion 分組彈珠台</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Serif+TC:wght@700;900&display=swap');
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
-    background: #1a0505;
-    color: #fff;
+    background: linear-gradient(180deg, #4a9fe8 0%, #87ceeb 30%, #fff 100%);
+    color: #333;
     font-family: 'Noto Sans TC', sans-serif;
     overflow-x: hidden;
     min-height: 100vh;
-    background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(180,20,20,0.15) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 50%, rgba(180,20,20,0.15) 0%, transparent 60%);
   }
-
-  /* ---- floating lanterns background ---- */
-  .lantern-bg {
+  .cloud-bg {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0; left: 0; right: 0; height: 250px;
     pointer-events: none;
     z-index: 0;
     overflow: hidden;
   }
-  .lantern-float {
+  .cloud {
     position: absolute;
-    font-size: 2.5rem;
-    opacity: 0.12;
-    animation: lanternDrift 12s ease-in-out infinite;
+    font-size: 4rem;
+    opacity: 0.6;
+    animation: cloudDrift 20s ease-in-out infinite;
+    filter: blur(1px);
   }
-  .lantern-float:nth-child(1) { left: 5%; top: 10%; animation-delay: 0s; }
-  .lantern-float:nth-child(2) { left: 15%; top: 60%; animation-delay: -3s; font-size: 2rem; }
-  .lantern-float:nth-child(3) { right: 8%; top: 20%; animation-delay: -6s; }
-  .lantern-float:nth-child(4) { right: 18%; top: 70%; animation-delay: -9s; font-size: 1.8rem; }
-  .lantern-float:nth-child(5) { left: 50%; top: 85%; animation-delay: -2s; font-size: 3rem; }
-  .lantern-float:nth-child(6) { left: 35%; top: 5%; animation-delay: -7s; font-size: 1.5rem; }
-  @keyframes lanternDrift {
-    0%, 100% { transform: translateY(0) rotate(-3deg); }
-    50%      { transform: translateY(-20px) rotate(3deg); }
+  .cloud:nth-child(1) { left: 5%; top: 20px; animation-delay: 0s; }
+  .cloud:nth-child(2) { left: 25%; top: 60px; animation-delay: -5s; font-size: 3rem; }
+  .cloud:nth-child(3) { right: 15%; top: 30px; animation-delay: -10s; }
+  .cloud:nth-child(4) { right: 35%; top: 80px; animation-delay: -15s; font-size: 2.5rem; }
+  @keyframes cloudDrift {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(30px); }
   }
-
-  /* ---- header ---- */
   .header {
     position: relative;
     z-index: 1;
     text-align: center;
-    padding: 16px 0 10px;
-    background: linear-gradient(180deg, #3a0808 0%, #1a0505 100%);
-    border-bottom: 3px solid #cc8800;
-    box-shadow: 0 0 40px rgba(204,136,0,0.25), 0 4px 20px rgba(0,0,0,0.5);
-  }
-  .header-deco {
-    font-size: 1.2rem;
-    color: #cc8800;
-    letter-spacing: 12px;
-    margin-bottom: 2px;
+    padding: 12px 0 8px;
+    background: linear-gradient(180deg, #1e3a5f 0%, #2d5a87 100%);
+    border-bottom: 4px solid #ffd700;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   }
   .header h1 {
     font-family: 'Noto Serif TC', serif;
-    font-size: 2.4rem;
+    font-size: 1.8rem;
     font-weight: 900;
-    background: linear-gradient(90deg, #ff4444, #ffcc00, #ff8800, #ffcc00, #ff4444);
-    background-size: 300% 100%;
+    background: linear-gradient(90deg, #ffd700, #fff5aa, #ffd700);
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shimmer 4s linear infinite;
-    letter-spacing: 10px;
-    filter: drop-shadow(0 0 8px rgba(255,200,0,0.4));
-  }
-  .header-sub {
-    font-size: 0.8rem;
-    color: #cc8800;
+    animation: shimmer 3s linear infinite;
     letter-spacing: 6px;
-    margin-top: 2px;
-    opacity: 0.7;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   }
-  @keyframes shimmer {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 300% 50%; }
-  }
-
+  .header-sub { font-size: 0.7rem; color: #87ceeb; letter-spacing: 3px; opacity: 0.9; }
+  @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
   .main-container {
     position: relative;
     z-index: 1;
     display: flex;
-    gap: 20px;
-    max-width: 1400px;
-    margin: 12px auto;
-    padding: 0 15px;
+    gap: 15px;
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 0 10px;
     align-items: flex-start;
   }
-
-  /* ---- Left panel ---- */
-  .panel { width: 200px; flex-shrink: 0; }
+  .panel { width: 180px; flex-shrink: 0; }
   .panel h3 {
     font-family: 'Noto Serif TC', serif;
-    font-size: 1rem;
-    color: #ffcc00;
-    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: #2d5a87;
+    margin-bottom: 6px;
     text-align: center;
-    text-shadow: 0 0 12px rgba(255,204,0,0.4);
+    background: linear-gradient(90deg, #ffd700, #ffaa00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
   }
-  .name-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    max-height: 580px;
-    overflow-y: auto;
-  }
+  .name-list { display: flex; flex-direction: column; gap: 3px; max-height: 500px; overflow-y: auto; }
   .name-item {
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 0.85rem;
+    padding: 5px 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
     font-weight: 700;
     text-align: center;
-    border: 2px solid rgba(204,136,0,0.2);
-    background: rgba(120,20,20,0.25);
-    transition: all 0.4s;
-    cursor: default;
-    color: #ffddaa;
+    border: 2px solid rgba(255,200,100,0.3);
+    background: rgba(255,255,255,0.8);
+    color: #2d5a87;
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   }
-  .name-item.launched {
-    opacity: 0.35;
-    transform: scale(0.9);
-    border-color: rgba(204,136,0,0.08);
-  }
-  .name-item.active {
-    animation: activePulse 0.6s ease-in-out infinite alternate;
-    border-color: #ff4444;
-    box-shadow: 0 0 15px rgba(255,68,68,0.5);
-    background: rgba(180,30,30,0.4);
-  }
-  @keyframes activePulse {
-    from { box-shadow: 0 0 10px rgba(255,68,68,0.3); }
-    to   { box-shadow: 0 0 25px rgba(255,68,68,0.8); }
-  }
-
-  /* ---- Canvas ---- */
-  .canvas-wrap {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  .name-item.launched { opacity: 0.4; transform: scale(0.9); }
+  .name-item.active { border-color: #ff6b9d; box-shadow: 0 0 15px rgba(255,107,157,0.5); background: rgba(255,200,220,0.9); }
+  .canvas-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; }
   canvas {
-    border: 3px solid #aa6600;
-    border-radius: 12px;
+    border: 6px solid #d4a530;
+    border-radius: 15px;
     box-shadow:
-      0 0 30px rgba(204,136,0,0.25),
-      0 0 60px rgba(180,20,20,0.2),
-      inset 0 0 60px rgba(0,0,0,0.4);
-    background: #120404;
+      0 0 0 3px #8b6914,
+      0 0 0 6px #d4a530,
+      0 8px 30px rgba(0,0,0,0.4),
+      inset 0 0 30px rgba(0,0,0,0.2);
+    background: linear-gradient(180deg, #3d5a80 0%, #4a7ab0 100%);
     display: block;
   }
-  .controls {
-    margin-top: 12px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  .controls { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; }
   .btn {
-    padding: 10px 28px;
+    padding: 10px 24px;
     border: none;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-family: 'Noto Sans TC', sans-serif;
-    letter-spacing: 2px;
-  }
-  .btn-launch {
-    background: linear-gradient(135deg, #dd2222, #aa0000);
-    color: #ffdd88;
-    box-shadow: 0 0 20px rgba(220,34,34,0.4);
-    border: 2px solid #cc8800;
-  }
-  .btn-launch:hover { box-shadow: 0 0 35px rgba(220,34,34,0.7); transform: scale(1.05); }
-  .btn-launch:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
-  .btn-auto {
-    background: linear-gradient(135deg, #cc8800, #996600);
-    color: #fff;
-    box-shadow: 0 0 20px rgba(204,136,0,0.3);
-    border: 2px solid #ffcc00;
-  }
-  .btn-auto:hover { box-shadow: 0 0 35px rgba(204,136,0,0.6); transform: scale(1.05); }
-  .btn-auto:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
-  .btn-reset {
-    background: linear-gradient(135deg, #3a2020, #1a0808);
-    color: #aa8866;
-    box-shadow: 0 0 10px rgba(204,136,0,0.1);
-    border: 2px solid #553322;
-  }
-  .btn-reset:hover { box-shadow: 0 0 20px rgba(204,136,0,0.2); transform: scale(1.05); color: #ffcc88; }
-
-  /* ---- Right panel ---- */
-  .groups-panel { width: 240px; flex-shrink: 0; }
-  .groups-panel h3 {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 1rem;
-    color: #ffcc00;
-    margin-bottom: 8px;
-    text-align: center;
-    text-shadow: 0 0 12px rgba(255,204,0,0.4);
-  }
-  .group-box {
-    border: 2px solid;
-    border-radius: 10px;
-    padding: 8px;
-    margin-bottom: 6px;
-    background: rgba(60,10,10,0.5);
-    transition: all 0.4s;
-  }
-  .group-box.full {
-    box-shadow: 0 0 20px rgba(255,204,0,0.25);
-    background: rgba(80,15,15,0.6);
-  }
-  .group-title {
-    font-size: 0.85rem;
-    font-weight: 900;
-    margin-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .group-members { display: flex; flex-direction: column; gap: 3px; }
-  .group-member {
-    padding: 4px 8px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-align: center;
-    animation: memberPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
-    border: 1px solid rgba(255,204,0,0.15);
-  }
-  .group-slot-empty {
-    padding: 4px 8px;
-    border-radius: 5px;
-    font-size: 0.75rem;
-    text-align: center;
-    color: rgba(255,200,150,0.2);
-    border: 1px dashed rgba(255,200,150,0.1);
-  }
-  .group-limit-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin-top: 3px;
-  }
-  .group-limit-row label {
-    font-size: 0.68rem;
-    color: rgba(255,200,150,0.5);
-    white-space: nowrap;
-  }
-  .group-limit-row input[type="range"] {
-    flex: 1;
-    height: 4px;
-    accent-color: #cc8800;
-    cursor: pointer;
-  }
-  .group-limit-val {
-    font-size: 0.72rem;
-    font-weight: 700;
-    min-width: 16px;
-    text-align: center;
-  }
-  @keyframes memberPop {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  /* ---- Completion ---- */
-  .completion-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(10,0,0,0.85);
-    z-index: 999;
-    justify-content: center;
-    align-items: center;
-  }
-  .completion-overlay.show { display: flex; }
-  .completion-box {
-    background: linear-gradient(135deg, #4a0808, #2a0404);
-    border: 3px solid #ffcc00;
-    border-radius: 20px;
-    padding: 30px 40px;
-    text-align: center;
-    box-shadow: 0 0 80px rgba(255,204,0,0.3), 0 0 30px rgba(220,34,34,0.3);
-    animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
-    max-width: 520px;
-  }
-  @keyframes popIn {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .completion-box h2 {
-    font-family: 'Noto Serif TC', serif;
-    font-size: 1.8rem;
-    color: #ffcc00;
-    margin-bottom: 15px;
-    text-shadow: 0 0 15px rgba(255,204,0,0.5);
-  }
-  .completion-box .btn { margin-top: 15px; }
-
-  /* ---- Scrollbar ---- */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: rgba(100,20,20,0.2); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb { background: rgba(204,136,0,0.3); border-radius: 3px; }
-
-  /* ---- Settings ---- */
-  .settings-bar {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    padding: 8px 16px;
-    flex-wrap: wrap;
-  }
-  .settings-bar label { font-size: 0.85rem; color: #cc9966; }
-  .settings-bar input[type="number"] {
-    background: rgba(120,30,30,0.3);
-    border: 1px solid rgba(204,136,0,0.3);
-    color: #ffddaa;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-family: inherit;
-    width: 60px;
-    text-align: center;
-  }
-  .volume-control { display: flex; align-items: center; gap: 6px; }
-  .volume-control input[type="range"] { width: 80px; accent-color: #cc3333; }
-
-  /* ---- Name input area ---- */
-  .name-input-area {
-    position: relative;
-    z-index: 1;
-    max-width: 800px;
-    margin: 0 auto 4px;
-    padding: 8px 16px;
-  }
-  .name-input-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .name-input-row input[type="text"] {
-    flex: 1;
-    min-width: 160px;
-    background: rgba(120,30,30,0.3);
-    border: 2px solid rgba(204,136,0,0.3);
-    color: #ffddaa;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  .name-input-row input[type="text"]:focus {
-    border-color: #ffcc00;
-    box-shadow: 0 0 12px rgba(255,204,0,0.2);
-  }
-  .name-input-row input[type="text"]::placeholder { color: rgba(204,153,100,0.4); }
-  .btn-add {
-    padding: 8px 20px;
+    border-radius: 25px;
     font-size: 0.9rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #cc3333, #992222);
-    color: #ffdd88;
-    border: 2px solid #cc8800;
-    border-radius: 8px;
     cursor: pointer;
-    font-family: inherit;
+    font-family: 'Noto Sans TC', sans-serif;
+    letter-spacing: 1px;
     transition: all 0.3s;
-    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
   }
-  .btn-add:hover { box-shadow: 0 0 15px rgba(220,34,34,0.5); transform: scale(1.03); }
-  .btn-clear {
-    padding: 8px 16px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    background: rgba(60,20,20,0.5);
-    color: #aa8866;
-    border: 1px solid #553322;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.3s;
-    white-space: nowrap;
-  }
-  .btn-clear:hover { color: #ffcc88; border-color: #886644; }
-  .name-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 8px;
-    min-height: 10px;
-  }
-  .name-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #ffddaa;
-    background: rgba(180,40,40,0.35);
-    border: 1px solid rgba(204,136,0,0.3);
-    animation: memberPop 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-    cursor: default;
-  }
-  .name-tag .tag-remove {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: rgba(255,100,100,0.25);
-    color: #ff8888;
-    font-size: 0.7rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    line-height: 1;
-    border: none;
-    font-family: inherit;
-    padding: 0;
-  }
-  .name-tag .tag-remove:hover {
-    background: rgba(255,80,80,0.5);
-    color: #fff;
-    transform: scale(1.15);
-  }
-  .name-count-hint {
-    font-size: 0.78rem;
-    color: #886644;
-    margin-top: 4px;
-  }
-
-  /* ---- Mobile Responsive ---- */
-  @media (max-width: 768px) {
-    .header { padding: 12px 0 8px; }
-    .header h1 {
-      font-size: 1.6rem;
-      letter-spacing: 4px;
-    }
-    .header-deco {
-      font-size: 1rem;
-      letter-spacing: 6px;
-    }
-    .header-sub {
-      font-size: 0.7rem;
-      letter-spacing: 3px;
-    }
-    .main-container {
-      flex-direction: column;
-      align-items: center;
-      padding: 0 8px;
-      gap: 12px;
-    }
-    .panel {
-      display: none;
-    }
-    .canvas-wrap {
-      width: 100%;
-    }
-    canvas {
-      max-width: 100%;
-      height: auto;
-    }
-    .groups-panel {
-      width: 100%;
-    }
-    #groupsDisplay {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    .group-box {
-      padding: 6px;
-      margin-bottom: 0;
-    }
-    .name-input-area {
-      padding: 8px;
-    }
-    .name-input-row input[type="text"] {
-      min-width: 100px;
-    }
-    .settings-bar {
-      padding: 6px 8px;
-    }
-    .controls {
-      gap: 8px;
-    }
-    .btn {
-      padding: 10px 20px;
-      font-size: 0.9rem;
-    }
-    .completion-box {
-      padding: 20px 16px;
-      margin: 0 12px;
-      max-width: 95vw;
-    }
-    .completion-box h2 {
-      font-size: 1.3rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .header h1 {
-      font-size: 1.3rem;
-      letter-spacing: 2px;
-    }
-    .header-deco {
-      font-size: 0.85rem;
-      letter-spacing: 4px;
-    }
-    .header-sub {
-      font-size: 0.65rem;
-      letter-spacing: 2px;
-    }
-    .settings-bar {
-      gap: 6px;
-      padding: 4px 6px;
-    }
-    .settings-bar label { font-size: 0.78rem; }
-    .btn {
-      padding: 10px 16px;
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-    }
-    .name-tag {
-      font-size: 0.75rem;
-      padding: 3px 8px;
-    }
-    .btn-add {
-      padding: 8px 14px;
-      font-size: 0.82rem;
-    }
-    .btn-clear {
-      padding: 6px 12px;
-      font-size: 0.75rem;
-    }
-    .group-title {
-      font-size: 0.78rem;
-    }
-    .group-member {
-      font-size: 0.72rem;
-      padding: 3px 6px;
-    }
-    .group-slot-empty {
-      font-size: 0.68rem;
-      padding: 3px 6px;
-    }
-    .group-limit-row label { font-size: 0.6rem; }
-    .group-limit-val { font-size: 0.65rem; }
-    .completion-box {
-      padding: 16px 12px;
-    }
-    .completion-box h2 {
-      font-size: 1.1rem;
-    }
-    .completion-box p {
-      font-size: 0.85rem;
-    }
+  .btn-launch { background: linear-gradient(135deg, #ff6b9d, #ff4081); color: #fff; border: 3px solid #fff; }
+  .btn-launch:hover { box-shadow: 0 0 25px rgba(255,64,129,0.6); transform: scale(1.03); }
+  .btn-launch:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-auto { background: linear-gradient(135deg, #4caf50, #2e7d32); color: #fff; border: 3px solid #fff; }
+  .btn-reset { background: linear-gradient(135deg, #78909c, #546e7a); color: #fff; border: 3px solid #fff; }
+  .control-hint { font-size: 0.7rem; color: #5a7a9a; background: rgba(255,255,255,0.7); padding: 4px 10px; border-radius: 10px; }
+  .control-hint span { color: #ff4081; font-weight: bold; }
+  .groups-panel { width: 200px; flex-shrink: 0; }
+  .groups-panel h3 { font-family: 'Noto Serif TC', serif; font-size: 0.9rem; color: #ffd700; margin-bottom: 6px; text-align: center; }
+  .group-box { border: 3px solid; border-radius: 12px; padding: 6px; margin-bottom: 5px; background: rgba(255,255,255,0.9); box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
+  .group-box.full { box-shadow: 0 0 20px rgba(255,200,0,0.4); }
+  .group-title { font-size: 0.75rem; font-weight: 900; margin-bottom: 3px; display: flex; align-items: center; gap: 4px; }
+  .group-members { display: flex; flex-direction: column; gap: 2px; }
+  .group-member { padding: 3px 6px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; text-align: center; animation: memberPop 0.4s ease-out; }
+  .group-slot-empty { padding: 3px 6px; font-size: 0.65rem; text-align: center; color: rgba(100,100,100,0.3); border: 1px dashed rgba(100,100,100,0.2); border-radius: 6px; }
+  @keyframes memberPop { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .settings-bar { position: relative; z-index: 1; display: flex; gap: 8px; justify-content: center; align-items: center; padding: 6px 10px; flex-wrap: wrap; background: rgba(255,255,255,0.5); }
+  .settings-bar label { font-size: 0.8rem; color: #2d5a87; font-weight: 600; }
+  .settings-bar input[type="number"] { background: rgba(255,255,255,0.9); border: 2px solid #d4a530; color: #2d5a87; padding: 3px 6px; border-radius: 8px; font-size: 0.8rem; width: 50px; text-align: center; }
+  .name-input-area { position: relative; z-index: 1; max-width: 700px; margin: 0 auto 6px; padding: 6px 12px; background: rgba(255,255,255,0.5); border-radius: 10px; }
+  .name-input-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .name-input-row input[type="text"] { flex: 1; min-width: 140px; background: rgba(255,255,255,0.9); border: 2px solid #d4a530; color: #2d5a87; padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; outline: none; }
+  .name-input-row input[type="text"]:focus { border-color: #ff4081; }
+  .btn-add { padding: 6px 14px; font-size: 0.8rem; background: linear-gradient(135deg, #ff6b9d, #ff4081); color: #fff; border: 2px solid #fff; border-radius: 8px; cursor: pointer; }
+  .btn-clear { padding: 6px 12px; font-size: 0.75rem; background: rgba(100,100,100,0.2); color: #666; border: 1px solid #aaa; border-radius: 8px; cursor: pointer; }
+  .name-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .name-tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 15px; font-size: 0.75rem; font-weight: 700; color: #2d5a87; background: rgba(255,255,255,0.9); border: 2px solid #d4a530; }
+  .name-tag .tag-remove { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,64,129,0.2); color: #ff4081; font-size: 0.65rem; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; }
+  .name-count-hint { font-size: 0.7rem; color: #5a7a9a; margin-top: 3px; }
+  .completion-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,50,100,0.9); z-index: 999; justify-content: center; align-items: center; }
+  .completion-overlay.show { display: flex; }
+  .completion-box { background: linear-gradient(135deg, #fff, #f5f5f5); border: 5px solid #ffd700; border-radius: 20px; padding: 25px 30px; text-align: center; max-width: 450px; box-shadow: 0 0 50px rgba(255,200,0,0.5); }
+  .completion-box h2 { font-family: 'Noto Serif TC', serif; font-size: 1.5rem; color: #d4a530; margin-bottom: 12px; }
+  @media (max-width: 900px) {
+    .main-container { flex-direction: column; align-items: center; }
+    .panel { display: none; }
+    .groups-panel { width: 100%; }
+    #groupsDisplay { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 5px; }
   }
 </style>
 </head>
 <body>
 
-<!-- floating lantern decorations -->
-<div class="lantern-bg">
-  <div class="lantern-float">🏮</div>
-  <div class="lantern-float">🧧</div>
-  <div class="lantern-float">🏮</div>
-  <div class="lantern-float">🧧</div>
-  <div class="lantern-float">🏮</div>
-  <div class="lantern-float">🧧</div>
+<div class="cloud-bg">
+  <div class="cloud">☁️</div>
+  <div class="cloud">☁️</div>
+  <div class="cloud">☁️</div>
+  <div class="cloud">☁️</div>
 </div>
 
 <div class="header">
-  <div class="header-deco">🏮 🧨 🎊 🧨 🏮</div>
-  <h1>新春彈珠台分組</h1>
-  <div class="header-sub">HAPPY NEW YEAR PACHINKO</div>
+  <h1>🎱 Shion 分組彈珠台 🎱</h1>
+  <div class="header-sub">DRAGON NEST PINBALL GROUPING</div>
 </div>
 
 <div class="settings-bar">
   <label>組數:</label>
-  <input type="number" id="numGroups" value="8" min="2" max="20" onchange="onGroupsChange()">
-  <div class="volume-control">
-    <label style="font-size:1.1rem">🔊</label>
-    <input type="range" id="volumeSlider" min="0" max="100" value="50" oninput="setVolume(this.value)">
-  </div>
+  <input type="number" id="numGroups" value="6" min="2" max="12" onchange="onGroupsChange()">
+  <label>每組人數:</label>
+  <input type="range" id="perGroupSlider" min="1" max="10" value="5" style="width:80px;accent-color:#d4a530" oninput="onPerGroupChange(this.value)">
+  <span id="perGroupValue" style="font-weight:bold;color:#2d5a87;min-width:20px">5</span>
+  <label>🔊</label>
+  <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width:60px;accent-color:#ff4081" oninput="setVolume(this.value)">
 </div>
 
 <div class="name-input-area">
   <div class="name-input-row">
-    <input type="text" id="nameTextField" placeholder="輸入名字後按 Enter 或點「加入」..." autocomplete="off">
+    <input type="text" id="nameTextField" placeholder="輸入名字，按 Enter 或點「加入」">
     <button class="btn-add" onclick="addNameFromInput()">加入</button>
-    <button class="btn-clear" onclick="clearCustomNames()">清空名單</button>
+    <button class="btn-clear" onclick="clearCustomNames()">清空</button>
   </div>
   <div class="name-tags" id="nameTags"></div>
-  <div class="name-count-hint" id="nameCountHint"></div>
+  <div class="name-count-hint" id="nameCountHint">尚未加入名字 — 直接開始將使用預設名單</div>
 </div>
 
 <div class="main-container">
   <div class="panel">
-    <h3>🧧 待分組名單</h3>
+    <h3>📋 待分組名單</h3>
     <div class="name-list" id="nameList"></div>
   </div>
   <div class="canvas-wrap">
-    <canvas id="pachinko" width="700" height="600"></canvas>
+    <canvas id="pinball" width="500" height="650"></canvas>
     <div class="controls">
-      <button class="btn btn-launch" id="btnLaunch" onclick="launchNext()">發射彈珠</button>
+      <button class="btn btn-launch" id="btnLaunch" onclick="launchNext()">🎱 發射彈珠</button>
       <button class="btn btn-auto" id="btnAuto" onclick="toggleAuto()">自動發射</button>
       <button class="btn btn-reset" onclick="resetGame()">重新開始</button>
     </div>
+    <div class="control-hint">
+      點擊右側彈簧區域按住蓄力，放開發射！或按 <span>空白鍵</span> 蓄力發射
+    </div>
   </div>
   <div class="groups-panel">
-    <h3>🏮 分組結果</h3>
+    <h3>🏆 分組結果</h3>
     <div id="groupsDisplay"></div>
   </div>
 </div>
 
 <div class="completion-overlay" id="completionOverlay">
   <div class="completion-box">
-    <h2>🎊 恭喜！分組完成！🎊</h2>
-    <p id="completionText" style="color:#ffcc99;line-height:1.8;"></p>
-    <button class="btn btn-launch" onclick="document.getElementById('completionOverlay').classList.remove('show')">關閉</button>
+    <h2>🎊 分組完成！🎊</h2>
+    <p id="completionText" style="color:#2d5a87;line-height:1.6;font-size:0.85rem;"></p>
+    <button class="btn btn-launch" style="margin-top:12px" onclick="document.getElementById('completionOverlay').classList.remove('show')">關閉</button>
   </div>
 </div>
 
 <script>
-// ============ SOUND ENGINE ============
+// ============ AUDIO ============
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
 let masterGain = null;
@@ -659,1035 +242,444 @@ function ensureAudio() {
   }
   if (audioCtx.state === 'suspended') audioCtx.resume();
 }
-function setVolume(v) {
-  volume = v / 100;
-  if (masterGain) masterGain.gain.value = volume;
-}
-
-function playTone(freq, duration, type='sine', volMul=1) {
+function setVolume(v) { volume = v / 100; if (masterGain) masterGain.gain.value = volume; }
+function playTone(freq, dur, type='sine', vol=1) {
   ensureAudio();
   const osc = audioCtx.createOscillator();
   const g = audioCtx.createGain();
   osc.type = type;
   osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-  g.gain.setValueAtTime(0.3 * volMul, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+  g.gain.setValueAtTime(0.3 * vol, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
   osc.connect(g); g.connect(masterGain);
-  osc.start(); osc.stop(audioCtx.currentTime + duration);
+  osc.start(); osc.stop(audioCtx.currentTime + dur);
 }
+const PENTA = [523, 587, 659, 784, 880, 1047];
+function playBumper() { playTone(PENTA[Math.floor(Math.random()*PENTA.length)], 0.15, 'triangle', 0.5); }
+function playFlipper() { playTone(150, 0.05, 'triangle', 0.4); }
+function playSlingshot() { playTone(440, 0.1, 'square', 0.3); }
+function playLaunch() { playTone(120, 0.25, 'sawtooth', 0.4); }
+function playLand() { const n = [523,659,784,1047]; n.forEach((f,i) => setTimeout(() => playTone(f, 0.15, 'triangle', 0.5), i*60)); }
+function playComplete() { const m = [523,659,784,1047,880,1047,1319]; m.forEach((f,i) => setTimeout(() => playTone(f, 0.3, 'triangle', 0.6), i*120)); }
+function playPeg() { playTone(800 + Math.random() * 200, 0.05, 'sine', 0.3); }
+function playTriangle() { playTone(600, 0.08, 'triangle', 0.35); }
 
-// pentatonic scale frequencies (Chinese music feel)
-const PENTA = [523, 587, 659, 784, 880, 1047, 1175, 1319, 1568];
+// ============ GAME CONFIG ============
+const GROUP_COLORS = ['#e53935','#ff9800','#4caf50','#2196f3','#9c27b0','#00bcd4','#ff5722','#673ab7','#e91e63','#8bc34a','#f44336','#3f51b5'];
+const DEFAULT_NAMES = ['愛因斯坦','牛頓','達文西','居里夫人','愛迪生','莎士比亞','貝多芬','莫札特','拿破崙','林肯','甘地','曼德拉','馬丁路德','哥倫布','伽利略','達爾文'];
 
-function playPegHit() {
-  playTone(PENTA[Math.floor(Math.random()*PENTA.length)], 0.08, 'sine', 0.25);
-}
-
-function playLaunch() {
-  ensureAudio();
-  // drum-like thump + rising tone
-  const osc = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-  osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.15);
-  g.gain.setValueAtTime(0.35, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-  osc.connect(g); g.connect(masterGain);
-  osc.start(); osc.stop(audioCtx.currentTime + 0.25);
-
-  // gong-like hit
-  const osc2 = audioCtx.createOscillator();
-  const g2 = audioCtx.createGain();
-  osc2.type = 'sine';
-  osc2.frequency.setValueAtTime(180, audioCtx.currentTime);
-  g2.gain.setValueAtTime(0.2, audioCtx.currentTime);
-  g2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
-  osc2.connect(g2); g2.connect(masterGain);
-  osc2.start(); osc2.stop(audioCtx.currentTime + 0.5);
-}
-
-function playSlotLand() {
-  ensureAudio();
-  // ascending pentatonic fanfare
-  const notes = [523, 659, 784, 1047];
-  notes.forEach((f,i) => {
-    setTimeout(() => playTone(f, 0.18, 'triangle', 0.5), i * 70);
-  });
-  // cymbal-like noise
-  setTimeout(() => {
-    const bufSize = audioCtx.sampleRate * 0.15;
-    const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
-    const data = buf.getChannelData(0);
-    for(let i=0;i<bufSize;i++) data[i]=(Math.random()*2-1)*0.15;
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = buf;
-    const ng = audioCtx.createGain();
-    ng.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    ng.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-    noise.connect(ng); ng.connect(masterGain);
-    noise.start(); noise.stop(audioCtx.currentTime + 0.2);
-  }, 200);
-}
-
-function playCompletion() {
-  ensureAudio();
-  // celebratory pentatonic melody
-  const melody = [523, 659, 784, 1047, 880, 1047, 1319, 1568];
-  melody.forEach((f,i) => {
-    setTimeout(() => playTone(f, 0.35, 'triangle', 0.6), i * 140);
-  });
-  // big gong at the end
-  setTimeout(() => {
-    const osc = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(110, audioCtx.currentTime);
-    g.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-    osc.connect(g); g.connect(masterGain);
-    osc.start(); osc.stop(audioCtx.currentTime + 1.5);
-  }, melody.length * 140);
-}
-
-function playWallBounce() {
-  playTone(250, 0.04, 'triangle', 0.15);
-}
-
-function playTouch(x, y) {
-  ensureAudio();
-  // pitch varies by touch position (higher = right/top, lower = left/bottom)
-  const basePitch = PENTA[Math.floor((x / W) * PENTA.length)] || 659;
-  playTone(basePitch, 0.12, 'triangle', 0.35);
-  // subtle harmonic
-  setTimeout(() => playTone(basePitch * 1.5, 0.08, 'sine', 0.15), 40);
-}
-
-// ============ CONFIG ============
-const GROUP_COLORS = [
-  '#ee2222', '#ffaa00', '#ff6622', '#cc2266',
-  '#ff4488', '#ddaa00', '#ee5533', '#ff3377',
-  '#cc4400', '#ffcc22', '#dd3355', '#ff8844',
-  '#bb2244', '#eebb00', '#ff5566', '#dd6633',
-  '#cc3344', '#ffdd44', '#ee4455', '#ff9955'
-];
-
-let customNames = [];  // user-added names
-let NUM_PEOPLE = 0;
-let NUM_GROUPS = 8;
-let MEMBERS_PER_GROUP = 3;
-let groupLimits = [];  // per-group max limits
+let customNames = [];
 let names = [];
 let groups = [];
+let groupLimits = [];
+let NUM_GROUPS = 6;
 let launchQueue = [];
-let currentBallIdx = -1;
 let autoMode = false;
 let autoTimer = null;
 let gameStarted = false;
 
 // ============ NAME MANAGEMENT ============
 const nameTextField = document.getElementById('nameTextField');
-
-nameTextField.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    addNameFromInput();
-  }
-});
-
-// support pasting comma-separated names
-nameTextField.addEventListener('paste', function(e) {
-  setTimeout(() => {
-    const val = nameTextField.value;
-    if (val.includes(',') || val.includes('，')) {
-      const parts = val.split(/[,，]/).map(n => n.trim()).filter(n => n);
-      if (parts.length > 1) {
-        parts.forEach(n => addOneName(n));
-        nameTextField.value = '';
-      }
-    }
-  }, 0);
-});
+nameTextField.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addNameFromInput(); } });
 
 function addNameFromInput() {
   const val = nameTextField.value.trim();
   if (!val) return;
-  // allow comma-separated batch add
-  const parts = val.split(/[,，]/).map(n => n.trim()).filter(n => n);
-  parts.forEach(n => addOneName(n));
+  val.split(/[,，]/).map(n => n.trim()).filter(n => n).forEach(n => { customNames.push(n); });
   nameTextField.value = '';
-  nameTextField.focus();
-}
-
-function addOneName(name) {
-  if (!name) return;
-  if (gameStarted) resetGame();
-  customNames.push(name);
   renderNameTags();
   syncNamesAndReset();
 }
-
-function removeCustomName(idx) {
-  if (gameStarted) resetGame();
-  customNames.splice(idx, 1);
-  renderNameTags();
-  syncNamesAndReset();
-}
-
-function clearCustomNames() {
-  if (gameStarted) resetGame();
-  customNames = [];
-  renderNameTags();
-  syncNamesAndReset();
-}
-
+function removeCustomName(idx) { customNames.splice(idx, 1); renderNameTags(); syncNamesAndReset(); }
+function clearCustomNames() { customNames = []; renderNameTags(); syncNamesAndReset(); }
 function renderNameTags() {
-  const container = document.getElementById('nameTags');
-  container.innerHTML = '';
-  customNames.forEach((name, idx) => {
-    const tag = document.createElement('span');
-    tag.className = 'name-tag';
-    tag.innerHTML = `${name}<button class="tag-remove" onclick="removeCustomName(${idx})" title="移除">&times;</button>`;
-    container.appendChild(tag);
+  const c = document.getElementById('nameTags');
+  c.innerHTML = '';
+  customNames.forEach((n, i) => {
+    const t = document.createElement('span');
+    t.className = 'name-tag';
+    t.innerHTML = `${n}<button class="tag-remove" onclick="removeCustomName(${i})">&times;</button>`;
+    c.appendChild(t);
   });
-  const hint = document.getElementById('nameCountHint');
-  if (customNames.length === 0) {
-    hint.textContent = '尚未加入名字 — 直接開始將使用預設 10 位歷史名人';
-  } else {
-    const capacity = getTotalCapacity();
-    if (capacity < customNames.length) {
-      hint.innerHTML = `<span style="color:#ff4444">⚠️ 容量不足！總容量 ${capacity} < ${customNames.length} 人</span>`;
-    } else {
-      hint.textContent = `共 ${customNames.length} 人，${NUM_GROUPS} 組，總容量 ${capacity} 位`;
-    }
-  }
+  document.getElementById('nameCountHint').textContent = customNames.length === 0
+    ? '尚未加入名字 — 直接開始將使用預設名單'
+    : `共 ${customNames.length} 人，${NUM_GROUPS} 組`;
 }
 
 function syncNamesAndReset() {
-  NUM_GROUPS = parseInt(document.getElementById('numGroups').value) || 8;
-  if (customNames.length > 0) {
-    NUM_PEOPLE = customNames.length;
-    if (NUM_GROUPS > NUM_PEOPLE) NUM_GROUPS = NUM_PEOPLE;
-  } else {
-    NUM_PEOPLE = 10;
-  }
-  MEMBERS_PER_GROUP = Math.ceil(NUM_PEOPLE / NUM_GROUPS);
-  // build per-group limits, preserve existing overrides
-  const oldLimits = [...groupLimits];
-  groupLimits = [];
-  for (let i = 0; i < NUM_GROUPS; i++) {
-    groupLimits.push(oldLimits[i] != null && i < oldLimits.length ? oldLimits[i] : MEMBERS_PER_GROUP);
-  }
-  initGroups();
+  NUM_GROUPS = parseInt(document.getElementById('numGroups').value) || 6;
+  names = customNames.length > 0 ? [...customNames] : [...DEFAULT_NAMES];
+  if (NUM_GROUPS > names.length) NUM_GROUPS = names.length;
+  // 使用 slider 的值來設定每組人數
+  const perGroup = parseInt(document.getElementById('perGroupSlider').value) || 5;
+  groupLimits = Array(NUM_GROUPS).fill(perGroup);
+  groups = Array.from({length: NUM_GROUPS}, () => []);
   buildSlots();
-  // rebuild name list and queue
-  if (customNames.length > 0) {
-    names = [...customNames];
-  } else {
-    names = [];
-    for (let i = 1; i <= NUM_PEOPLE; i++) names.push(`成員 ${i}`);
-  }
   buildUI();
+  launchQueue = names.map((_, i) => i);
+  shuffleArray(launchQueue);
   balls = [];
-  particles = [];
-  fireworks = [];
-  currentBallIdx = -1;
+  currentBall = null;
   gameStarted = false;
   document.getElementById('btnLaunch').disabled = false;
-  launchQueue = [];
-  for (let i = 0; i < NUM_PEOPLE; i++) launchQueue.push(i);
-  shuffleArray(launchQueue);
 }
-
-function onGroupsChange() {
+function onGroupsChange() { syncNamesAndReset(); renderNameTags(); }
+function onPerGroupChange(val) {
+  document.getElementById('perGroupValue').textContent = val;
   syncNamesAndReset();
-  renderNameTags(); // update hint text
+  renderNameTags();
 }
+function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } }
 
-// ============ PHYSICS ============
-const canvas = document.getElementById('pachinko');
+// ============ CANVAS & PHYSICS ============
+const canvas = document.getElementById('pinball');
 const ctx = canvas.getContext('2d');
 const W = canvas.width;
 const H = canvas.height;
 
-const PEG_ROWS = 9;
-const PEG_START_Y = 80;
-const PEG_SPACING_Y = 45;
-const PEG_RADIUS = 5;
-const BALL_RADIUS = 14;
-const GRAVITY = 0.25;
-const DAMPING = 0.6;
-const SLOT_HEIGHT = 60;
+// Physics constants
+const GRAVITY = 980;
+const BALL_R = 13;  // 縮小為 2/3
+const SUBSTEPS = 4;
+const WALL_REST = 0.65;
+const BUMPER_REST = 1.1;
+const PEG_REST = 0.55;
 
-let pegs = [];
-let balls = [];
+// Layout
+const SLOT_H = 55;
+const LANE_W = 34;  // 配合縮小的球
+const LANE_X = W - LANE_W - 8;
+const PLUNGER_REST_Y = H - 50;
+const PLUNGER_MAX = 60;
+
 let slots = [];
-let particles = [];
-let fireworks = []; // background firework bursts
-let touchRipples = []; // touch interaction ripples
+let balls = [];
+let currentBall = null;
+let plungerPull = 0;
+let isPlunging = false;
+let lastTime = 0;
 
-function buildPegs() {
-  pegs = [];
-  const marginX = 60;
-  const usableW = W - marginX * 2;
-  for (let row = 0; row < PEG_ROWS; row++) {
-    const cols = row % 2 === 0 ? 10 : 9;
-    const offset = row % 2 === 0 ? 0 : (usableW / 10) / 2;
-    for (let col = 0; col < cols; col++) {
-      const x = marginX + offset + col * (usableW / (cols - 1 || 1));
-      const y = PEG_START_Y + row * PEG_SPACING_Y;
-      pegs.push({ x, y, hitGlow: 0 });
+
+// Sunflower Bumpers (Royal Match style)
+class SunflowerBumper {
+  constructor(x, y, r) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.flash = 0;
+    this.rotation = Math.random() * Math.PI * 2;
+  }
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rotation);
+
+    // Petals
+    const petalCount = 12;
+    const petalR = this.r * 0.45;
+    for (let i = 0; i < petalCount; i++) {
+      const ang = (i / petalCount) * Math.PI * 2;
+      const px = Math.cos(ang) * (this.r - petalR * 0.3);
+      const py = Math.sin(ang) * (this.r - petalR * 0.3);
+      ctx.beginPath();
+      ctx.arc(px, py, petalR, 0, Math.PI * 2);
+      const pg = ctx.createRadialGradient(px, py - petalR*0.3, 0, px, py, petalR);
+      if (this.flash > 0) {
+        pg.addColorStop(0, '#fff');
+        pg.addColorStop(0.5, '#ffff88');
+        pg.addColorStop(1, '#ffcc00');
+      } else {
+        pg.addColorStop(0, '#ffe066');
+        pg.addColorStop(0.5, '#ffcc00');
+        pg.addColorStop(1, '#cc9900');
+      }
+      ctx.fillStyle = pg;
+      ctx.fill();
     }
+
+    // Center
+    ctx.beginPath();
+    ctx.arc(0, 0, this.r * 0.55, 0, Math.PI * 2);
+    const cg = ctx.createRadialGradient(-this.r*0.1, -this.r*0.1, 0, 0, 0, this.r * 0.55);
+    if (this.flash > 0) {
+      cg.addColorStop(0, '#fff');
+      cg.addColorStop(0.3, '#ffdd44');
+      cg.addColorStop(1, '#dd9900');
+      this.flash--;
+    } else {
+      cg.addColorStop(0, '#ffdd88');
+      cg.addColorStop(0.3, '#ddaa44');
+      cg.addColorStop(1, '#996622');
+    }
+    ctx.fillStyle = cg;
+    ctx.fill();
+
+    // Shine
+    ctx.beginPath();
+    ctx.arc(-this.r * 0.15, -this.r * 0.15, this.r * 0.2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.fill();
+
+    ctx.restore();
   }
 }
+
+// Orange Pegs
+class Peg {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.r = 6;
+    this.flash = 0;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    const g = ctx.createRadialGradient(this.x - 2, this.y - 2, 0, this.x, this.y, this.r);
+    if (this.flash > 0) {
+      g.addColorStop(0, '#fff');
+      g.addColorStop(0.5, '#ffcc00');
+      g.addColorStop(1, '#ff9900');
+      this.flash--;
+    } else {
+      g.addColorStop(0, '#ffaa44');
+      g.addColorStop(0.5, '#ff8800');
+      g.addColorStop(1, '#cc5500');
+    }
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.strokeStyle = '#ffcc88';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+}
+
+// White Triangle obstacles
+class Triangle {
+  constructor(x, y, size, pointing) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.pointing = pointing; // 'down' or 'up'
+    this.flash = 0;
+  }
+  getPoints() {
+    const s = this.size;
+    if (this.pointing === 'down') {
+      return [
+        { x: this.x, y: this.y + s * 0.7 },
+        { x: this.x - s * 0.6, y: this.y - s * 0.4 },
+        { x: this.x + s * 0.6, y: this.y - s * 0.4 }
+      ];
+    } else {
+      return [
+        { x: this.x, y: this.y - s * 0.7 },
+        { x: this.x - s * 0.6, y: this.y + s * 0.4 },
+        { x: this.x + s * 0.6, y: this.y + s * 0.4 }
+      ];
+    }
+  }
+  getEdges() {
+    const pts = this.getPoints();
+    return [[pts[0], pts[1]], [pts[1], pts[2]], [pts[2], pts[0]]];
+  }
+  draw() {
+    const pts = this.getPoints();
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    ctx.lineTo(pts[1].x, pts[1].y);
+    ctx.lineTo(pts[2].x, pts[2].y);
+    ctx.closePath();
+
+    if (this.flash > 0) {
+      ctx.fillStyle = '#ffff88';
+      this.flash--;
+    } else {
+      ctx.fillStyle = '#ffffff';
+    }
+    ctx.fill();
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Inner shadow
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    ctx.lineTo(pts[1].x, pts[1].y);
+    ctx.lineTo(pts[2].x, pts[2].y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(200,200,200,0.3)';
+    ctx.fill();
+  }
+}
+
+
+// 向日葵 bumpers - 暫時移除
+const bumpers = [];
+const PLAY_W = LANE_X - 24; // playable width ~436
+
+// 橘色圓釘 - 交錯排列，包含左右牆邊
+const pegs = [];
+const PEG_AREA_LEFT = 50;
+const PEG_AREA_RIGHT = LANE_X - 30;
+const PEG_AREA_WIDTH = PEG_AREA_RIGHT - PEG_AREA_LEFT;
+const ROW_SPACING = 45;  // 縮小間距配合小球
+
+// 左側牆邊釘子 - 阻擋順牆滑落
+pegs.push(new Peg(25, 280));
+pegs.push(new Peg(25, 340));
+pegs.push(new Peg(25, 400));
+pegs.push(new Peg(25, 460));
+pegs.push(new Peg(25, 520));
+
+// 右側牆邊釘子 - 阻擋順牆滑落
+pegs.push(new Peg(LANE_X - 20, 280));
+pegs.push(new Peg(LANE_X - 20, 340));
+pegs.push(new Peg(LANE_X - 20, 400));
+pegs.push(new Peg(LANE_X - 20, 460));
+pegs.push(new Peg(LANE_X - 20, 520));
+
+// Row 1 - 4 pegs
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 260));
+}
+// Row 2 - 5 pegs (交錯)
+for (let i = 0; i < 5; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 305));
+}
+// Row 3 - 4 pegs
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 350));
+}
+// Row 4 - 5 pegs (交錯)
+for (let i = 0; i < 5; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 395));
+}
+// Row 5 - 4 pegs
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 440));
+}
+// Row 6 - 5 pegs (交錯)
+for (let i = 0; i < 5; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 485));
+}
+// Row 7 - 4 pegs
+for (let i = 0; i < 4; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 530));
+}
+
+// 白色三角形障礙物 - 暫時移除
+const triangles = [];
+
+
+// 牆壁設定 - 圓弧連接到發射軌道右側外牆
+const walls = [];
+function addWall(x1, y1, x2, y2) { walls.push({x1, y1, x2, y2}); }
+
+const FRAME_LEFT = 12;
+const FRAME_TOP = 200;  // 圓弧位置
+
+// 左側牆壁
+addWall(FRAME_LEFT, FRAME_TOP, FRAME_LEFT, H - SLOT_H);
+
+// 頂部圓弧 - 從左側延伸到發射軌道外牆 (W-8)
+const arcStartX = FRAME_LEFT;
+const arcEndX = W - 8;  // 連接到發射軌道右側！
+const arcCx = (arcStartX + arcEndX) / 2;
+const halfWidth = (arcEndX - arcStartX) / 2;
+const arcHeight = 180;
+
+const arcR = (arcHeight * arcHeight + halfWidth * halfWidth) / (2 * arcHeight);
+const arcCy = FRAME_TOP - arcHeight + arcR;
+
+for (let i = 0; i < 16; i++) {
+  const t1 = i / 16;
+  const t2 = (i + 1) / 16;
+  const x1 = arcStartX + t1 * (arcEndX - arcStartX);
+  const x2 = arcStartX + t2 * (arcEndX - arcStartX);
+  const dx1 = x1 - arcCx;
+  const dx2 = x2 - arcCx;
+  const y1 = arcCy - Math.sqrt(Math.max(0, arcR * arcR - dx1 * dx1));
+  const y2 = arcCy - Math.sqrt(Math.max(0, arcR * arcR - dx2 * dx2));
+  addWall(x1, y1, x2, y2);
+}
+
+// 發射軌道左側牆 - 從 200 開始，上方留空讓球從圓弧進入場內
+const LANE_WALL_TOP = 240;
+addWall(LANE_X, LANE_WALL_TOP, LANE_X, H - SLOT_H);
+
+// 發射軌道外牆（右側）- 從圓弧向下延伸
+addWall(W - 8, FRAME_TOP, W - 8, H);
 
 function buildSlots() {
   slots = [];
-  const slotW = W / NUM_GROUPS;
+  const slotW = (LANE_X - 12) / NUM_GROUPS;
   for (let i = 0; i < NUM_GROUPS; i++) {
-    slots.push({ x: i * slotW, w: slotW, groupIdx: i, label: `第${i+1}組` });
+    slots.push({ x: 12 + i * slotW, w: slotW, idx: i });
   }
-}
-
-const DEFAULT_NAMES = [
-  '愛因斯坦', '牛頓', '達文西', '莎士比亞', '孔子',
-  '貝多芬', '居里夫人', '甘地', '拿破崙', '乾隆皇帝'
-];
-
-function initNames() {
-  if (customNames.length > 0) {
-    names = [...customNames];
-    NUM_PEOPLE = names.length;
-  } else {
-    NUM_PEOPLE = DEFAULT_NAMES.length;
-    names = [...DEFAULT_NAMES];
-  }
-  if (NUM_GROUPS > NUM_PEOPLE) NUM_GROUPS = NUM_PEOPLE;
-  MEMBERS_PER_GROUP = Math.ceil(NUM_PEOPLE / NUM_GROUPS);
-  // init per-group limits
-  const oldLimits = [...groupLimits];
-  groupLimits = [];
-  for (let i = 0; i < NUM_GROUPS; i++) {
-    groupLimits.push(oldLimits[i] != null && i < oldLimits.length ? oldLimits[i] : MEMBERS_PER_GROUP);
-  }
-}
-
-function initGroups() {
-  groups = [];
-  for (let i = 0; i < NUM_GROUPS; i++) groups.push([]);
 }
 
 function buildUI() {
   const nl = document.getElementById('nameList');
   nl.innerHTML = '';
-  names.forEach((name, idx) => {
-    const div = document.createElement('div');
-    div.className = 'name-item';
-    div.id = 'name-' + idx;
-    div.textContent = name;
-    nl.appendChild(div);
+  names.forEach((n, i) => {
+    const d = document.createElement('div');
+    d.className = 'name-item';
+    d.id = 'name-' + i;
+    d.textContent = n;
+    nl.appendChild(d);
   });
   renderGroups();
-}
-
-function setGroupLimit(idx, val) {
-  val = parseInt(val);
-  if (val < 1) val = 1;
-  if (val > NUM_PEOPLE) val = NUM_PEOPLE;
-  groupLimits[idx] = val;
-  const label = document.getElementById('glVal-' + idx);
-  if (label) label.textContent = val;
-  // update full state visually
-  const box = document.getElementById('gbox-' + idx);
-  if (box) {
-    if (groups[idx].length >= val) box.classList.add('full');
-    else box.classList.remove('full');
-  }
-  // update capacity hint
-  updateCapacityHint();
-}
-
-function updateCapacityHint() {
-  const hint = document.getElementById('nameCountHint');
-  const capacity = getTotalCapacity();
-  const people = NUM_PEOPLE;
-  if (capacity < people) {
-    hint.innerHTML = `<span style="color:#ff4444">⚠️ 容量不足！總容量 ${capacity} < ${people} 人</span>`;
-  } else {
-    hint.textContent = `共 ${people} 人，${NUM_GROUPS} 組，總容量 ${capacity} 位`;
-  }
 }
 
 function renderGroups() {
   const gd = document.getElementById('groupsDisplay');
   gd.innerHTML = '';
   for (let i = 0; i < NUM_GROUPS; i++) {
-    const lim = groupLimits[i] || MEMBERS_PER_GROUP;
+    const lim = groupLimits[i];
     const box = document.createElement('div');
     box.className = 'group-box' + (groups[i].length >= lim ? ' full' : '');
-    box.style.borderColor = GROUP_COLORS[i];
-    box.id = 'gbox-' + i;
-
+    box.style.borderColor = GROUP_COLORS[i % GROUP_COLORS.length];
     const title = document.createElement('div');
     title.className = 'group-title';
-    title.style.color = GROUP_COLORS[i];
-    title.innerHTML = `<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${GROUP_COLORS[i]}"></span> 第 ${i+1} 組 (${groups[i].length}/<span id="glVal-${i}" class="group-limit-val" style="color:${GROUP_COLORS[i]}">${lim}</span>)`;
+    title.style.color = GROUP_COLORS[i % GROUP_COLORS.length];
+    title.innerHTML = `<span style="width:12px;height:12px;border-radius:50%;background:${GROUP_COLORS[i % GROUP_COLORS.length]};display:inline-block;box-shadow:0 2px 4px rgba(0,0,0,0.2)"></span> 第${i+1}組 (${groups[i].length}/${lim})`;
     box.appendChild(title);
-
-    // per-group limit slider
-    const limitRow = document.createElement('div');
-    limitRow.className = 'group-limit-row';
-    limitRow.innerHTML = `<label>上限</label><input type="range" min="1" max="${NUM_PEOPLE}" value="${lim}" oninput="setGroupLimit(${i}, this.value)">`;
-    box.appendChild(limitRow);
-
     const members = document.createElement('div');
     members.className = 'group-members';
     for (let j = 0; j < lim; j++) {
+      const m = document.createElement('div');
       if (j < groups[i].length) {
-        const m = document.createElement('div');
         m.className = 'group-member';
-        m.style.background = GROUP_COLORS[i] + '33';
-        m.style.color = GROUP_COLORS[i];
+        m.style.background = GROUP_COLORS[i % GROUP_COLORS.length] + '22';
+        m.style.color = GROUP_COLORS[i % GROUP_COLORS.length];
         m.textContent = groups[i][j];
-        members.appendChild(m);
       } else {
-        const m = document.createElement('div');
         m.className = 'group-slot-empty';
         m.textContent = '---';
-        members.appendChild(m);
       }
+      members.appendChild(m);
     }
     box.appendChild(members);
     gd.appendChild(box);
   }
 }
 
-// ============ CAPACITY CHECK ============
-function getTotalCapacity() {
-  let total = 0;
-  for (let i = 0; i < NUM_GROUPS; i++) {
-    total += groupLimits[i] || MEMBERS_PER_GROUP;
-  }
-  return total;
-}
+// ============ INPUT ============
+const keys = {};
+document.addEventListener('keydown', e => {
+  if (keys[e.code]) return;
+  keys[e.code] = true;
+  if (e.code === 'Space' && currentBall && currentBall.inLane) { isPlunging = true; }
+  if (e.code === 'Space') e.preventDefault();
+});
+document.addEventListener('keyup', e => {
+  keys[e.code] = false;
+  if (e.code === 'Space' && isPlunging) { launchBall(); isPlunging = false; }
+});
 
-function checkCapacityWarning() {
-  const capacity = getTotalCapacity();
-  const remaining = launchQueue.length;
-  if (remaining > capacity) {
-    alert(`⚠️ 容量不足！\n\n目前總容量：${capacity} 位\n待分配人數：${remaining} 位\n\n請增加各組上限，或減少人數。`);
-    return false;
-  }
-  return true;
-}
-
-// ============ BALL LAUNCH ============
-function launchNext() {
-  if (launchQueue.length === 0) return;
-  // check capacity on first launch
-  if (!gameStarted && !checkCapacityWarning()) return;
-  const idx = launchQueue.shift();
-  currentBallIdx = idx;
-  document.getElementById('name-' + idx).classList.add('active');
-  const ball = {
-    x: W/2 + (Math.random()-0.5)*80, y: -BALL_RADIUS,
-    vx: (Math.random()-0.5)*3, vy: 0,
-    nameIdx: idx,
-    color: GROUP_COLORS[idx % GROUP_COLORS.length],
-    trail: [], landed: false, slotIdx: -1, glow: 1
-  };
-  balls.push(ball);
-  gameStarted = true;
-  playLaunch();
-}
-
-function toggleAuto() {
-  autoMode = !autoMode;
-  const btn = document.getElementById('btnAuto');
-  if (autoMode) {
-    btn.textContent = '停止自動';
-    btn.style.background = 'linear-gradient(135deg, #cc2222, #880000)';
-    runAuto();
-  } else {
-    btn.textContent = '自動發射';
-    btn.style.background = 'linear-gradient(135deg, #cc8800, #996600)';
-    if (autoTimer) clearTimeout(autoTimer);
-  }
-}
-
-function runAuto() {
-  if (!autoMode) return;
-  if (launchQueue.length === 0) {
-    autoMode = false;
-    const btn = document.getElementById('btnAuto');
-    btn.textContent = '自動發射';
-    btn.style.background = 'linear-gradient(135deg, #cc8800, #996600)';
-    return;
-  }
-  launchNext();
-  autoTimer = setTimeout(runAuto, 1000);
-}
-
-// ============ PHYSICS ============
-function findAvailableSlot() {
-  const available = [];
-  for (let i = 0; i < NUM_GROUPS; i++) {
-    if (groups[i].length < (groupLimits[i] || MEMBERS_PER_GROUP)) available.push(i);
-  }
-  if (available.length === 0) return -1;
-  return available[Math.floor(Math.random() * available.length)];
-}
-
-// spawn a firework burst (decorative)
-function spawnFirework(x, y) {
-  const color = GROUP_COLORS[Math.floor(Math.random()*GROUP_COLORS.length)];
-  const count = 30 + Math.floor(Math.random()*20);
-  for (let i = 0; i < count; i++) {
-    const angle = (Math.PI*2*i)/count + (Math.random()-0.5)*0.3;
-    const speed = 1.5 + Math.random()*3;
-    fireworks.push({
-      x, y,
-      vx: Math.cos(angle)*speed,
-      vy: Math.sin(angle)*speed,
-      life: 1,
-      color,
-      size: 2 + Math.random()*2,
-      gravity: 0.02
-    });
-  }
-}
-
-function update() {
-  // random background fireworks (subtle)
-  if (Math.random() < 0.008) {
-    spawnFirework(50 + Math.random()*(W-100), 30 + Math.random()*200);
-  }
-
-  for (const ball of balls) {
-    if (ball.landed) continue;
-    ball.vy += GRAVITY;
-    ball.x += ball.vx;
-    ball.y += ball.vy;
-
-    ball.trail.push({ x: ball.x, y: ball.y });
-    if (ball.trail.length > 15) ball.trail.shift();
-
-    if (ball.x - BALL_RADIUS < 0) {
-      ball.x = BALL_RADIUS;
-      ball.vx = Math.abs(ball.vx)*DAMPING;
-      playWallBounce();
-    }
-    if (ball.x + BALL_RADIUS > W) {
-      ball.x = W - BALL_RADIUS;
-      ball.vx = -Math.abs(ball.vx)*DAMPING;
-      playWallBounce();
-    }
-
-    for (const peg of pegs) {
-      const dx = ball.x - peg.x;
-      const dy = ball.y - peg.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      const minDist = BALL_RADIUS + PEG_RADIUS;
-      if (dist < minDist) {
-        const nx = dx/dist, ny = dy/dist;
-        ball.x = peg.x + nx*minDist;
-        ball.y = peg.y + ny*minDist;
-        const dot = ball.vx*nx + ball.vy*ny;
-        ball.vx = (ball.vx - 2*dot*nx)*DAMPING + (Math.random()-0.5)*1.5;
-        ball.vy = (ball.vy - 2*dot*ny)*DAMPING;
-        if (ball.vy < 0.5) ball.vy = 0.5;
-        peg.hitGlow = 1;
-        playPegHit();
-        for (let i = 0; i < 5; i++) {
-          particles.push({
-            x: peg.x, y: peg.y,
-            vx: (Math.random()-0.5)*4, vy: (Math.random()-0.5)*4,
-            life: 1, color: '#ffcc00', size: 2 + Math.random()*2
-          });
-        }
-      }
-    }
-
-    // decay peg glow
-    for (const peg of pegs) {
-      if (peg.hitGlow > 0) peg.hitGlow -= 0.04;
-    }
-
-    const slotTop = H - SLOT_HEIGHT;
-
-    // barrier: bounce ball off full slots
-    if (ball.y + BALL_RADIUS >= slotTop - 2 && ball.y + BALL_RADIUS < slotTop + 8) {
-      let overSlot = Math.floor(ball.x / (W / NUM_GROUPS));
-      overSlot = Math.max(0, Math.min(NUM_GROUPS - 1, overSlot));
-      const lim = groupLimits[overSlot] || MEMBERS_PER_GROUP;
-      if (groups[overSlot].length >= lim) {
-        // bounce upward off the barrier
-        ball.vy = -Math.abs(ball.vy) * 0.65 - 1.5;
-        ball.y = slotTop - BALL_RADIUS - 3;
-        // push toward nearest open slot
-        let nearest = -1, nearDist = Infinity;
-        for (let s = 0; s < NUM_GROUPS; s++) {
-          if (groups[s].length < (groupLimits[s] || MEMBERS_PER_GROUP)) {
-            const sc = slots[s].x + slots[s].w / 2;
-            const d = Math.abs(ball.x - sc);
-            if (d < nearDist) { nearDist = d; nearest = s; }
-          }
-        }
-        if (nearest >= 0) {
-          const sc = slots[nearest].x + slots[nearest].w / 2;
-          ball.vx += (sc > ball.x ? 1 : -1) * (2 + Math.random() * 2);
-        } else {
-          ball.vx += (Math.random() - 0.5) * 4;
-        }
-        playWallBounce();
-        // barrier spark particles
-        for (let p = 0; p < 6; p++) {
-          particles.push({
-            x: ball.x, y: slotTop,
-            vx: (Math.random() - 0.5) * 5, vy: -Math.random() * 3,
-            life: 0.8, color: GROUP_COLORS[overSlot], size: 2 + Math.random() * 2
-          });
-        }
-        continue; // skip landing check this frame
-      }
-    }
-
-    if (ball.y + BALL_RADIUS >= slotTop) {
-      let naturalSlot = Math.floor(ball.x / (W/NUM_GROUPS));
-      naturalSlot = Math.max(0, Math.min(NUM_GROUPS-1, naturalSlot));
-      let targetSlot = naturalSlot;
-      if (groups[targetSlot].length >= (groupLimits[targetSlot] || MEMBERS_PER_GROUP)) targetSlot = findAvailableSlot();
-      if (targetSlot === -1) { ball.landed = true; continue; }
-
-      ball.landed = true;
-      ball.slotIdx = targetSlot;
-      ball.y = slotTop + SLOT_HEIGHT/2;
-      ball.x = slots[targetSlot].x + slots[targetSlot].w/2;
-      ball.color = GROUP_COLORS[targetSlot];
-      groups[targetSlot].push(names[ball.nameIdx]);
-
-      const nameEl = document.getElementById('name-' + ball.nameIdx);
-      nameEl.classList.remove('active');
-      nameEl.classList.add('launched');
-      nameEl.style.borderColor = GROUP_COLORS[targetSlot];
-      nameEl.style.color = GROUP_COLORS[targetSlot];
-
-      renderGroups();
-      playSlotLand();
-
-      // firework burst on landing
-      spawnFirework(ball.x, ball.y - 15);
-      for (let i = 0; i < 15; i++) {
-        const angle = (Math.PI*2*i)/15;
-        particles.push({
-          x: ball.x, y: ball.y,
-          vx: Math.cos(angle)*(2+Math.random()*3),
-          vy: Math.sin(angle)*(2+Math.random()*3),
-          life: 1, color: GROUP_COLORS[targetSlot],
-          size: 4 + Math.random()*3
-        });
-      }
-
-      if (launchQueue.length === 0 && !balls.some(b => !b.landed)) {
-        setTimeout(() => { playCompletion(); showCompletion(); }, 500);
-      }
-    }
-  }
-
-  // particles
-  for (let i = particles.length-1; i >= 0; i--) {
-    const p = particles[i];
-    p.x += p.vx; p.y += p.vy;
-    p.life -= 0.03;
-    if (p.life <= 0) particles.splice(i,1);
-  }
-  // fireworks
-  for (let i = fireworks.length-1; i >= 0; i--) {
-    const f = fireworks[i];
-    f.x += f.vx; f.y += f.vy;
-    f.vy += f.gravity;
-    f.vx *= 0.98; f.vy *= 0.98;
-    f.life -= 0.015;
-    if (f.life <= 0) fireworks.splice(i,1);
-  }
-  // touch ripples
-  for (let i = touchRipples.length-1; i >= 0; i--) {
-    const r = touchRipples[i];
-    r.radius += (r.maxRadius - r.radius) * 0.15;
-    r.life -= 0.035;
-    if (r.life <= 0) touchRipples.splice(i, 1);
-  }
-}
-
-// ============ RENDERING ============
-let frameCount = 0;
-
-// pre-compute plum blossom positions (decorative on canvas)
-const blossoms = [];
-for (let i = 0; i < 12; i++) {
-  blossoms.push({
-    x: Math.random()*700, y: Math.random()*500 + 50,
-    size: 3 + Math.random()*5,
-    alpha: 0.04 + Math.random()*0.06,
-    speed: 0.2 + Math.random()*0.3,
-    phase: Math.random()*Math.PI*2
-  });
-}
-
-function drawPlumBlossom(cx, cy, size, alpha) {
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  // 5 petals
-  for (let i = 0; i < 5; i++) {
-    const angle = (Math.PI*2*i)/5 - Math.PI/2;
-    const px = cx + Math.cos(angle)*size*0.7;
-    const py = cy + Math.sin(angle)*size*0.7;
-    ctx.beginPath();
-    ctx.arc(px, py, size*0.5, 0, Math.PI*2);
-    ctx.fillStyle = '#ff6688';
-    ctx.fill();
-  }
-  // center
-  ctx.beginPath();
-  ctx.arc(cx, cy, size*0.25, 0, Math.PI*2);
-  ctx.fillStyle = '#ffcc44';
-  ctx.fill();
-  ctx.restore();
-}
-
-function draw() {
-  ctx.clearRect(0, 0, W, H);
-  frameCount++;
-
-  // dark red background with subtle pattern
-  ctx.fillStyle = '#120404';
-  ctx.fillRect(0, 0, W, H);
-
-  // subtle Chinese lattice-like grid
-  ctx.strokeStyle = 'rgba(150,40,40,0.07)';
-  ctx.lineWidth = 1;
-  for (let x = 0; x < W; x += 35) {
-    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
-  }
-  for (let y = 0; y < H; y += 35) {
-    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
-  }
-  // diagonal crosses at grid intersections (subtle)
-  ctx.strokeStyle = 'rgba(150,40,40,0.04)';
-  for (let x = 0; x < W; x += 70) {
-    for (let y = 0; y < H; y += 70) {
-      ctx.beginPath(); ctx.moveTo(x-5,y-5); ctx.lineTo(x+5,y+5); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x+5,y-5); ctx.lineTo(x-5,y+5); ctx.stroke();
-    }
-  }
-
-  // floating blossoms
-  for (const b of blossoms) {
-    const bx = b.x + Math.sin(frameCount*0.01 + b.phase)*15;
-    const by = b.y + Math.cos(frameCount*0.008 + b.phase)*8;
-    drawPlumBlossom(bx, by, b.size, b.alpha);
-  }
-
-  // background fireworks
-  for (const f of fireworks) {
-    ctx.beginPath();
-    ctx.arc(f.x, f.y, f.size*f.life, 0, Math.PI*2);
-    const a = Math.floor(f.life*180).toString(16).padStart(2,'0');
-    ctx.fillStyle = f.color + a;
-    ctx.fill();
-    // tiny sparkle tail
-    ctx.beginPath();
-    ctx.arc(f.x - f.vx*2, f.y - f.vy*2, f.size*f.life*0.4, 0, Math.PI*2);
-    const a2 = Math.floor(f.life*80).toString(16).padStart(2,'0');
-    ctx.fillStyle = '#ffeecc' + a2;
-    ctx.fill();
-  }
-
-  // slot area
-  const slotTop = H - SLOT_HEIGHT;
-  ctx.fillStyle = 'rgba(60,5,5,0.6)';
-  ctx.fillRect(0, slotTop, W, SLOT_HEIGHT);
-
-  for (let i = 0; i < NUM_GROUPS; i++) {
-    const sx = slots[i].x, sw = slots[i].w;
-    ctx.fillStyle = GROUP_COLORS[i] + '12';
-    ctx.fillRect(sx+1, slotTop, sw-2, SLOT_HEIGHT);
-    if (i > 0) {
-      ctx.strokeStyle = '#cc880066';
-      ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(sx, slotTop); ctx.lineTo(sx, H); ctx.stroke();
-    }
-    ctx.fillStyle = GROUP_COLORS[i];
-    ctx.font = 'bold 11px "Noto Sans TC"';
-    ctx.textAlign = 'center';
-    ctx.fillText(slots[i].label, sx+sw/2, slotTop+15);
-    ctx.fillStyle = GROUP_COLORS[i] + '88';
-    ctx.font = '10px "Noto Sans TC"';
-    ctx.fillText(`${groups[i].length}/${groupLimits[i] || MEMBERS_PER_GROUP}`, sx+sw/2, slotTop+28);
-  }
-
-  // barriers on full slots
-  for (let i = 0; i < NUM_GROUPS; i++) {
-    const lim = groupLimits[i] || MEMBERS_PER_GROUP;
-    if (groups[i].length >= lim) {
-      const sx = slots[i].x, sw = slots[i].w;
-      // dark overlay
-      ctx.fillStyle = 'rgba(10,0,0,0.5)';
-      ctx.fillRect(sx + 1, slotTop, sw - 2, SLOT_HEIGHT);
-      // glowing barrier line
-      const pulse = 0.6 + 0.4 * Math.sin(frameCount * 0.08);
-      ctx.strokeStyle = `rgba(255,80,80,${pulse * 0.8})`;
-      ctx.lineWidth = 3;
-      ctx.beginPath(); ctx.moveTo(sx + 4, slotTop); ctx.lineTo(sx + sw - 4, slotTop); ctx.stroke();
-      // glow effect
-      ctx.shadowColor = '#ff4444';
-      ctx.shadowBlur = 10;
-      ctx.strokeStyle = `rgba(255,60,60,${pulse * 0.4})`;
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(sx + 4, slotTop); ctx.lineTo(sx + sw - 4, slotTop); ctx.stroke();
-      ctx.shadowBlur = 0;
-      // X mark
-      ctx.fillStyle = `rgba(255,100,100,${pulse * 0.5})`;
-      ctx.font = 'bold 16px "Noto Sans TC"';
-      ctx.textAlign = 'center';
-      ctx.fillText('✕', sx + sw / 2, slotTop + 44);
-    }
-  }
-
-  // top line of slot area
-  ctx.strokeStyle = 'rgba(204,136,0,0.35)';
-  ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(0, slotTop); ctx.lineTo(W, slotTop); ctx.stroke();
-
-  // pegs (golden coin style)
-  for (const peg of pegs) {
-    const baseGlow = 0.35 + 0.15*Math.sin(frameCount*0.04 + peg.x*0.015 + peg.y*0.01);
-    const glow = Math.max(baseGlow, peg.hitGlow || 0);
-
-    // outer glow
-    ctx.beginPath();
-    ctx.arc(peg.x, peg.y, PEG_RADIUS + 5, 0, Math.PI*2);
-    ctx.fillStyle = `rgba(255,200,50,${glow*0.15})`;
-    ctx.fill();
-
-    // peg body (gold)
-    ctx.beginPath();
-    ctx.arc(peg.x, peg.y, PEG_RADIUS, 0, Math.PI*2);
-    const pg = ctx.createRadialGradient(peg.x-1, peg.y-1, 0, peg.x, peg.y, PEG_RADIUS);
-    pg.addColorStop(0, `rgba(255,238,170,${glow+0.3})`);
-    pg.addColorStop(1, `rgba(204,153,50,${glow+0.1})`);
-    ctx.fillStyle = pg;
-    ctx.fill();
-    ctx.strokeStyle = `rgba(255,200,80,${glow+0.15})`;
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  }
-
-  // particles
-  for (const p of particles) {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size*p.life, 0, Math.PI*2);
-    const a = Math.floor(p.life*220).toString(16).padStart(2,'0');
-    ctx.fillStyle = p.color + a;
-    ctx.fill();
-  }
-
-  // touch ripples
-  for (const r of touchRipples) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(r.x, r.y, r.radius, 0, Math.PI*2);
-    ctx.strokeStyle = `rgba(255,200,80,${r.life*0.6})`;
-    ctx.lineWidth = 2 + r.life * 2;
-    ctx.stroke();
-    // inner ring
-    ctx.beginPath();
-    ctx.arc(r.x, r.y, r.radius * 0.5, 0, Math.PI*2);
-    ctx.strokeStyle = `rgba(255,100,50,${r.life*0.3})`;
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    // center glow
-    const rg = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, r.radius*0.4);
-    rg.addColorStop(0, `rgba(255,220,100,${r.life*0.2})`);
-    rg.addColorStop(1, 'rgba(255,220,100,0)');
-    ctx.fillStyle = rg;
-    ctx.beginPath();
-    ctx.arc(r.x, r.y, r.radius*0.4, 0, Math.PI*2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  // balls
-  for (const ball of balls) {
-    // trail (golden sparkle)
-    for (let i = 0; i < ball.trail.length; i++) {
-      const t = ball.trail[i];
-      const alpha = (i/ball.trail.length)*0.35;
-      const size = BALL_RADIUS*(i/ball.trail.length)*0.7;
-      ctx.beginPath();
-      ctx.arc(t.x, t.y, size, 0, Math.PI*2);
-      const a = Math.floor(alpha*255).toString(16).padStart(2,'0');
-      ctx.fillStyle = '#ffcc44' + a;
-      ctx.fill();
-    }
-
-    // ball glow
-    if (!ball.landed) {
-      const grad = ctx.createRadialGradient(ball.x, ball.y, 0, ball.x, ball.y, BALL_RADIUS*3);
-      grad.addColorStop(0, ball.color + '44');
-      grad.addColorStop(1, ball.color + '00');
-      ctx.beginPath();
-      ctx.arc(ball.x, ball.y, BALL_RADIUS*3, 0, Math.PI*2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-    }
-
-    // ball body (red/gold gradient)
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, BALL_RADIUS, 0, Math.PI*2);
-    const bg = ctx.createRadialGradient(ball.x-3, ball.y-3, 1, ball.x, ball.y, BALL_RADIUS);
-    bg.addColorStop(0, '#ffeecc');
-    bg.addColorStop(0.3, '#dd2222');
-    bg.addColorStop(1, '#880000');
-    ctx.fillStyle = bg;
-    ctx.fill();
-    ctx.strokeStyle = '#ffcc6688';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    // name on ball
-    if (!ball.landed) {
-      ctx.fillStyle = '#ffeecc';
-      ctx.font = 'bold 9px "Noto Sans TC"';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const dn = names[ball.nameIdx].length > 4 ? names[ball.nameIdx].slice(0,3)+'..' : names[ball.nameIdx];
-      ctx.fillText(dn, ball.x, ball.y);
-    }
-    if (ball.landed) {
-      ctx.fillStyle = ball.color;
-      ctx.font = 'bold 10px "Noto Sans TC"';
-      ctx.textAlign = 'center';
-      ctx.fillText(names[ball.nameIdx], ball.x, ball.y + BALL_RADIUS + 12);
-    }
-  }
-
-  // launcher indicator
-  if (launchQueue.length > 0 && !balls.some(b => !b.landed)) {
-    const nextIdx = launchQueue[0];
-    const cx = W/2, cy = 20;
-    ctx.fillStyle = '#ffcc00';
-    ctx.font = 'bold 13px "Noto Serif TC"';
-    ctx.textAlign = 'center';
-    ctx.fillText(`▼ ${names[nextIdx]} ▼`, cx, cy);
-    const arrowY = 38 + Math.sin(frameCount*0.1)*5;
-    ctx.beginPath();
-    ctx.moveTo(cx, arrowY);
-    ctx.lineTo(cx-8, arrowY-10);
-    ctx.lineTo(cx+8, arrowY-10);
-    ctx.closePath();
-    ctx.fillStyle = '#ffcc0066';
-    ctx.fill();
-  }
-
-  // remaining count
-  ctx.fillStyle = 'rgba(255,200,150,0.5)';
-  ctx.font = '11px "Noto Sans TC"';
-  ctx.textAlign = 'left';
-  ctx.fillText(`剩餘: ${launchQueue.length}/${NUM_PEOPLE}`, 8, 18);
-
-  // decorative corner lanterns on canvas
-  drawLantern(28, 28, 14);
-  drawLantern(W-28, 28, 14);
-}
-
-function drawLantern(cx, cy, size) {
-  ctx.save();
-  // string
-  ctx.strokeStyle = '#cc880066';
-  ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(cx, cy-size); ctx.lineTo(cx, cy-size*1.5); ctx.stroke();
-  // body
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, size*0.6, size, 0, 0, Math.PI*2);
-  const lg = ctx.createRadialGradient(cx, cy, 0, cx, cy, size);
-  lg.addColorStop(0, 'rgba(255,100,50,0.5)');
-  lg.addColorStop(0.7, 'rgba(220,30,30,0.4)');
-  lg.addColorStop(1, 'rgba(180,20,20,0.2)');
-  ctx.fillStyle = lg;
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(255,200,100,0.3)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  // glow
-  ctx.beginPath();
-  ctx.arc(cx, cy, size*1.5, 0, Math.PI*2);
-  const gg = ctx.createRadialGradient(cx, cy, 0, cx, cy, size*1.5);
-  gg.addColorStop(0, 'rgba(255,150,50,0.08)');
-  gg.addColorStop(1, 'rgba(255,100,30,0)');
-  ctx.fillStyle = gg;
-  ctx.fill();
-  ctx.restore();
-}
-
-function gameLoop() {
-  update();
-  draw();
-  requestAnimationFrame(gameLoop);
-}
-
-// ============ GAME CONTROL ============
-function showCompletion() {
-  // big fireworks celebration
-  for (let i = 0; i < 8; i++) {
-    setTimeout(() => {
-      spawnFirework(80+Math.random()*(W-160), 40+Math.random()*250);
-    }, i*200);
-  }
-  setTimeout(() => {
-    const overlay = document.getElementById('completionOverlay');
-    const text = document.getElementById('completionText');
-    let lines = [];
-    for (let i = 0; i < NUM_GROUPS; i++) {
-      lines.push(`🏮 第${i+1}組：${groups[i].join('、')}`);
-    }
-    text.innerHTML = lines.join('<br>');
-    overlay.classList.add('show');
-  }, 1200);
-}
-
-function resetGame() {
-  autoMode = false;
-  gameStarted = false;
-  if (autoTimer) clearTimeout(autoTimer);
-  const btn = document.getElementById('btnAuto');
-  btn.textContent = '自動發射';
-  btn.style.background = 'linear-gradient(135deg, #cc8800, #996600)';
-  document.getElementById('btnLaunch').disabled = false;
-  balls = [];
-  particles = [];
-  fireworks = [];
-  touchRipples = [];
-  currentBallIdx = -1;
-  NUM_GROUPS = parseInt(document.getElementById('numGroups').value) || 8;
-  initNames();
-  initGroups();
-  buildSlots();
-  buildUI();
-  launchQueue = [];
-  for (let i = 0; i < NUM_PEOPLE; i++) launchQueue.push(i);
-  shuffleArray(launchQueue);
-}
-
-function shuffleArray(arr) {
-  for (let i = arr.length-1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
-
-// ============ TOUCH INTERACTION ============
-function getCanvasCoords(e) {
+// ============ MOUSE/TOUCH SUPPORT ============
+function getCanvasPos(e) {
   const rect = canvas.getBoundingClientRect();
   const scaleX = W / rect.width;
   const scaleY = H / rect.height;
@@ -1705,167 +697,768 @@ function getCanvasCoords(e) {
   };
 }
 
-function handleCanvasTap(e) {
-  e.preventDefault();
-  const pos = getCanvasCoords(e);
+function isInPlungerArea(x, y) {
+  // Entire right side lane area is clickable for plunger
+  return x >= LANE_X - 20 && x <= W;
+}
 
-  // shockwave: push nearby balls away
-  const PUSH_RADIUS = 130;
-  const PUSH_FORCE = 18;
-  const BOUNCE_RADIUS = 40;
+let touchPlunger = false;
+
+// 點擊效果陣列
+const clickEffects = [];
+
+canvas.addEventListener('mousedown', handlePointerDown);
+canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
+
+canvas.addEventListener('mouseup', handlePointerUp);
+canvas.addEventListener('touchend', handlePointerUp);
+canvas.addEventListener('mouseleave', handlePointerUp);
+canvas.addEventListener('touchcancel', handlePointerUp);
+
+function handlePointerDown(e) {
+  e.preventDefault();
+  const pos = getCanvasPos(e);
+
+  // Check plunger area (right side)
+  if (isInPlungerArea(pos.x, pos.y)) {
+    if (currentBall && currentBall.inLane) {
+      isPlunging = true;
+      touchPlunger = true;
+    } else if (!currentBall && launchQueue.length > 0) {
+      // Auto launch next ball when clicking plunger with no ball
+      launchNext();
+    }
+  } else {
+    // 點擊球場區域 - 產生視覺效果並干擾球
+    createClickEffect(pos.x, pos.y);
+  }
+}
+
+// 創建點擊效果並干擾附近的球
+function createClickEffect(x, y) {
+  // 添加視覺漣漪效果
+  clickEffects.push({
+    x: x,
+    y: y,
+    radius: 10,
+    maxRadius: 60,
+    alpha: 1,
+    color: '#ffdd88'
+  });
+
+  // 干擾附近的球
+  const pushRadius = 80;  // 影響範圍
+  const pushForce = 200;  // 推力強度
+
+  for (const ball of balls) {
+    if (ball.landed || ball.inLane) continue;
+
+    const dx = ball.x - x;
+    const dy = ball.y - y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < pushRadius && dist > 0) {
+      // 根據距離計算推力（越近越強）
+      const force = pushForce * (1 - dist / pushRadius);
+      const nx = dx / dist;
+      const ny = dy / dist;
+      ball.vx += nx * force;
+      ball.vy += ny * force;
+    }
+  }
+
+  // 播放音效
+  playPeg();
+}
+
+function handlePointerUp(e) {
+  if (touchPlunger && isPlunging) {
+    launchBall();
+    isPlunging = false;
+    touchPlunger = false;
+  }
+}
+
+// ============ BALL MANAGEMENT ============
+function launchNext() {
+  if (launchQueue.length === 0 || currentBall) return;
+  gameStarted = true;
+  const idx = launchQueue.shift();
+  document.getElementById('name-' + idx).classList.add('active');
+  currentBall = {
+    x: LANE_X + LANE_W / 2,
+    y: PLUNGER_REST_Y - 14 - BALL_R,
+    vx: 0, vy: 0,
+    nameIdx: idx,
+    inLane: true,
+    landed: false,
+    phase: 'ready', // ready -> sprint -> apex -> plunge
+    apexTimer: 0,
+    trail: [] // for motion trail effect
+  };
+  balls.push(currentBall);
+  plungerPull = 0;
+}
+
+function launchBall() {
+  if (!currentBall || !currentBall.inLane || plungerPull < 5) return;
+  const power = plungerPull / PLUNGER_MAX;
+  // Launch straight up (reduced power)
+  currentBall.vy = -800 - power * 500;
+  currentBall.vx = 0;
+  currentBall.inLane = false;
+  currentBall.phase = 'sprint';
+  currentBall.trail = [];
+  playLaunch();
+  plungerPull = 0;
+  // 立即允許下一顆發射
+  currentBall = null;
+}
+
+function findAvailableSlot() {
+  const avail = [];
+  for (let i = 0; i < NUM_GROUPS; i++) {
+    if (groups[i].length < groupLimits[i]) avail.push(i);
+  }
+  return avail.length > 0 ? avail[Math.floor(Math.random() * avail.length)] : -1;
+}
+
+function ballLanded(ball, slotIdx) {
+  ball.landed = true;
+  groups[slotIdx].push(names[ball.nameIdx]);
+  const el = document.getElementById('name-' + ball.nameIdx);
+  el.classList.remove('active');
+  el.classList.add('launched');
+  el.style.color = GROUP_COLORS[slotIdx % GROUP_COLORS.length];
+  renderGroups();
+  playLand();
+
+  if (launchQueue.length === 0 && !balls.some(b => !b.landed)) {
+    setTimeout(showCompletion, 600);
+  }
+}
+
+// ============ PHYSICS ============
+function ptSegDist(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const lenSq = dx*dx + dy*dy;
+  if (lenSq === 0) return { dist: Math.sqrt((px-x1)**2 + (py-y1)**2), nx: px-x1, ny: py-y1 };
+  let t = Math.max(0, Math.min(1, ((px-x1)*dx + (py-y1)*dy) / lenSq));
+  const nx = px - (x1 + t*dx), ny = py - (y1 + t*dy);
+  return { dist: Math.sqrt(nx*nx + ny*ny), nx, ny, t };
+}
+
+function reflect(vx, vy, nx, ny, e) {
+  const dot = vx*nx + vy*ny;
+  return { vx: vx - (1+e)*dot*nx, vy: vy - (1+e)*dot*ny };
+}
+
+function updatePhysics(dt) {
+  // Plunger charge
+  if (isPlunging && currentBall && currentBall.inLane) {
+    plungerPull = Math.min(plungerPull + 150 * dt, PLUNGER_MAX);
+  }
+
   for (const ball of balls) {
     if (ball.landed) continue;
-    const dx = ball.x - pos.x;
-    const dy = ball.y - pos.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < BOUNCE_RADIUS && dist > 0) {
-      // hard bounce: reflect velocity away from touch point
-      const nx = dx / dist, ny = dy / dist;
-      const dot = ball.vx * nx + ball.vy * ny;
-      if (dot < 0) { // ball moving toward touch point
-        ball.vx -= 2 * dot * nx;
-        ball.vy -= 2 * dot * ny;
+
+    // Store trail positions for motion effect
+    if (ball.trail) {
+      ball.trail.unshift({ x: ball.x, y: ball.y, age: 0 });
+      if (ball.trail.length > 12) ball.trail.pop();
+      ball.trail.forEach(t => t.age += dt);
+    }
+
+    if (ball.inLane) {
+      ball.x = LANE_X + LANE_W / 2;
+      ball.y = PLUNGER_REST_Y + plungerPull - 14 - BALL_R;
+      continue;
+    }
+
+    // === 三段式軌道演義 ===
+
+    // 【起跑：線性衝刺】Sprint phase - ball racing up the lane
+    if (ball.phase === 'sprint') {
+      ball.vy += GRAVITY * 0.5 * dt;  // Slightly reduced gravity
+      // Ball will hit the arc and naturally bounce into playfield
+      // The arc's curve will deflect the ball leftward
+    }
+    // 【頂端：滯空轉向】Apex phase - triggered by hitting arc
+    else if (ball.phase === 'apex') {
+      ball.apexTimer -= dt;
+      ball.vy += GRAVITY * 0.5 * dt;
+      if (ball.apexTimer <= 0) {
+        ball.phase = 'plunge';
+        playTone(440, 0.15, 'triangle', 0.4);
       }
-      ball.vx += nx * PUSH_FORCE * 0.8;
-      ball.vy += ny * PUSH_FORCE * 0.8;
-      // push ball out of bounce zone
-      ball.x = pos.x + nx * BOUNCE_RADIUS;
-      ball.y = pos.y + ny * BOUNCE_RADIUS;
-    } else if (dist < PUSH_RADIUS) {
-      const force = (1 - dist / PUSH_RADIUS) * PUSH_FORCE;
-      ball.vx += (dx / dist) * force;
-      ball.vy += (dy / dist) * force;
+    }
+    // 【落下：重力回歸】Plunge phase - full gravity descent
+    else {
+      ball.vy += GRAVITY * dt;
+    }
+
+    ball.vx *= 0.998;
+    ball.vy *= 0.998;
+
+    const subDt = dt / SUBSTEPS;
+    for (let s = 0; s < SUBSTEPS; s++) {
+      ball.x += ball.vx * subDt;
+      ball.y += ball.vy * subDt;
+
+      // Walls
+      for (const w of walls) {
+        const info = ptSegDist(ball.x, ball.y, w.x1, w.y1, w.x2, w.y2);
+        if (info.dist < BALL_R) {
+          const len = info.dist || 0.001;
+          const nx = info.nx / len, ny = info.ny / len;
+          ball.x += nx * (BALL_R - info.dist);
+          ball.y += ny * (BALL_R - info.dist);
+          const r = reflect(ball.vx, ball.vy, nx, ny, WALL_REST);
+          ball.vx = r.vx; ball.vy = r.vy;
+        }
+      }
+
+      // Bumpers
+      for (const b of bumpers) {
+        const dx = ball.x - b.x, dy = ball.y - b.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < BALL_R + b.r) {
+          const nx = dx/dist, ny = dy/dist;
+          ball.x = b.x + nx * (BALL_R + b.r + 1);
+          ball.y = b.y + ny * (BALL_R + b.r + 1);
+          const r = reflect(ball.vx, ball.vy, nx, ny, BUMPER_REST);
+          ball.vx = r.vx; ball.vy = r.vy;
+          const spd = Math.sqrt(ball.vx**2 + ball.vy**2);
+          if (spd < 350) { ball.vx *= 350/spd; ball.vy *= 350/spd; }
+          b.flash = 10;
+          b.rotation += 0.2;
+          // First collision triggers plunge phase
+          if (ball.phase !== 'plunge') ball.phase = 'plunge';
+          playBumper();
+        }
+      }
+
+      // Pegs
+      for (const p of pegs) {
+        const dx = ball.x - p.x, dy = ball.y - p.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < BALL_R + p.r) {
+          const nx = dx/dist, ny = dy/dist;
+          ball.x = p.x + nx * (BALL_R + p.r + 1);
+          ball.y = p.y + ny * (BALL_R + p.r + 1);
+          const r = reflect(ball.vx, ball.vy, nx, ny, PEG_REST);
+          ball.vx = r.vx; ball.vy = r.vy;
+          p.flash = 6;
+          playPeg();
+        }
+      }
+
+      // 球與球碰撞
+      for (const other of balls) {
+        if (other === ball || other.landed || other.inLane) continue;
+        if (ball.inLane) continue;
+        const dx = ball.x - other.x;
+        const dy = ball.y - other.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const minDist = BALL_R * 2;
+        if (dist < minDist && dist > 0) {
+          // 分離兩球
+          const nx = dx / dist;
+          const ny = dy / dist;
+          const overlap = (minDist - dist) / 2;
+          ball.x += nx * overlap;
+          ball.y += ny * overlap;
+          other.x -= nx * overlap;
+          other.y -= ny * overlap;
+          // 彈性碰撞 - 交換速度分量
+          const relVx = ball.vx - other.vx;
+          const relVy = ball.vy - other.vy;
+          const relDot = relVx * nx + relVy * ny;
+          if (relDot < 0) {
+            const restitution = 0.8;
+            ball.vx -= restitution * relDot * nx;
+            ball.vy -= restitution * relDot * ny;
+            other.vx += restitution * relDot * nx;
+            other.vy += restitution * relDot * ny;
+            playPeg();
+          }
+        }
+      }
+
+      // Triangles - 第一道防線
+      for (const tri of triangles) {
+        const edges = tri.getEdges();
+        for (let i = 0; i < edges.length; i++) {
+          const [p1, p2] = edges[i];
+          const info = ptSegDist(ball.x, ball.y, p1.x, p1.y, p2.x, p2.y);
+          if (info.dist < BALL_R) {
+            const len = info.dist || 0.001;
+            const nx = info.nx / len, ny = info.ny / len;
+            ball.x += nx * (BALL_R - info.dist);
+            ball.y += ny * (BALL_R - info.dist);
+            const r = reflect(ball.vx, ball.vy, nx, ny, WALL_REST);
+            ball.vx = r.vx; ball.vy = r.vy;
+            tri.flash = 6;
+            // 正式「入侵」財富迷宮
+            if (ball.phase !== 'plunge') ball.phase = 'plunge';
+            playTriangle();
+            break;
+          }
+        }
+      }
+
+      // Slot landing
+      const slotTop = H - SLOT_H;
+      if (ball.y + BALL_R >= slotTop && ball.x >= 12 && ball.x < LANE_X) {
+        let slotIdx = Math.floor((ball.x - 12) / ((LANE_X - 12) / NUM_GROUPS));
+        slotIdx = Math.max(0, Math.min(NUM_GROUPS - 1, slotIdx));
+
+        // 如果該位子滿了，彈開！
+        if (groups[slotIdx].length >= groupLimits[slotIdx]) {
+          ball.y = slotTop - BALL_R - 1;
+          ball.vy = -Math.abs(ball.vy) * 0.7 - 200;  // 向上彈開
+          ball.vx += (Math.random() - 0.5) * 300;  // 隨機左右偏移
+          playPeg();  // 播放碰撞音效
+        } else {
+          // 位子有空，降落
+          ball.x = slots[slotIdx].x + slots[slotIdx].w / 2;
+          ball.y = slotTop + SLOT_H / 2;
+          ballLanded(ball, slotIdx);
+          break;
+        }
+      }
+
+      // Drain (ball goes off screen - shouldn't happen in pachinko)
+      if (ball.y > H + BALL_R * 2) {
+        // Ball lost - respawn
+        ball.landed = true;
+        document.getElementById('name-' + ball.nameIdx).classList.remove('active');
+        launchQueue.unshift(ball.nameIdx); // Put back in queue
+        currentBall = null;
+      }
+
+      // Top bound - only prevent going off-screen, let walls handle bouncing
+      if (ball.y < BALL_R + 8) {
+        ball.y = BALL_R + 8;
+        ball.vy = Math.abs(ball.vy) * 0.5;
+        // Trigger apex phase if still sprinting
+        if (ball.phase === 'sprint') {
+          ball.phase = 'apex';
+          ball.apexTimer = 0.15;
+          ball.vx = -150; // Push ball LEFT toward playfield
+          playTone(880, 0.1, 'sine', 0.3);
+        }
+      }
+    }
+  }
+}
+
+// ============ DRAWING ============
+function draw() {
+  // Blue gradient background
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+  bgGrad.addColorStop(0, '#3d5a80');
+  bgGrad.addColorStop(0.5, '#4a7ab0');
+  bgGrad.addColorStop(1, '#3d5a80');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle grid pattern
+  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += 35) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 35) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // Golden frame effect (inner)
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(6, 6, W - 12, H - 12);
+
+  // Walls - golden style
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  for (const w of walls) {
+    ctx.beginPath(); ctx.moveTo(w.x1, w.y1); ctx.lineTo(w.x2, w.y2); ctx.stroke();
+  }
+  // Wall highlight
+  ctx.strokeStyle = '#ffdd88';
+  ctx.lineWidth = 2;
+  for (const w of walls) {
+    ctx.beginPath(); ctx.moveTo(w.x1, w.y1); ctx.lineTo(w.x2, w.y2); ctx.stroke();
+  }
+
+  // Launch lane - taller now
+  const LANE_VISUAL_TOP = 540;  // Match wall LANE_WALL_TOP
+  const laneGrad = ctx.createLinearGradient(LANE_X, 0, LANE_X + LANE_W, 0);
+  laneGrad.addColorStop(0, '#1a3050');
+  laneGrad.addColorStop(0.3, '#2a4570');
+  laneGrad.addColorStop(0.7, '#2a4570');
+  laneGrad.addColorStop(1, '#1a3050');
+  ctx.fillStyle = laneGrad;
+  ctx.fillRect(LANE_X, LANE_VISUAL_TOP, LANE_W, H - LANE_VISUAL_TOP + 5);
+
+  // Lane left and right borders only
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(LANE_X, LANE_VISUAL_TOP);
+  ctx.lineTo(LANE_X, H);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(LANE_X + LANE_W, LANE_VISUAL_TOP);
+  ctx.lineTo(LANE_X + LANE_W, H);
+  ctx.stroke();
+
+  // Lane inner glow lines
+  ctx.strokeStyle = 'rgba(255, 200, 100, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(LANE_X + 4, LANE_VISUAL_TOP + 10);
+  ctx.lineTo(LANE_X + 4, H - 60);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(LANE_X + LANE_W - 4, LANE_VISUAL_TOP + 10);
+  ctx.lineTo(LANE_X + LANE_W - 4, H - 60);
+  ctx.stroke();
+
+  // Upward arrows showing launch direction
+  ctx.fillStyle = 'rgba(255, 220, 100, 0.6)';
+  ctx.font = 'bold 16px sans-serif';
+  ctx.textAlign = 'center';
+  const arrowY = LANE_VISUAL_TOP + 30 + (Date.now() % 1000) / 1000 * 20;
+  for (let i = 0; i < 3; i++) {
+    const alpha = 0.8 - i * 0.25;
+    ctx.fillStyle = `rgba(255, 220, 100, ${alpha})`;
+    ctx.fillText('▲', LANE_X + LANE_W/2, arrowY + i * 25);
+  }
+
+  // Plunger
+  const plY = PLUNGER_REST_Y + plungerPull;
+  // Spring coils
+  ctx.strokeStyle = '#888';
+  ctx.lineWidth = 3;
+  const sTop = plY + 14, sBot = H - 18;
+  const coils = 5;
+  ctx.beginPath();
+  for (let i = 0; i <= coils; i++) {
+    const y = sTop + (sBot - sTop) * i / coils;
+    const x = LANE_X + LANE_W/2 + (i % 2 === 0 ? -6 : 6);
+    if (i === 0) ctx.moveTo(LANE_X + LANE_W/2, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.lineTo(LANE_X + LANE_W/2, sBot);
+  ctx.stroke();
+
+  // Plunger head - 箭頭平台樣式
+  const platW = LANE_W - 10;
+  const platH = 8;
+  ctx.fillStyle = '#d4a530';
+  ctx.fillRect(LANE_X + 5, plY - platH/2, platW, platH);
+  ctx.strokeStyle = '#ffdd88';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(LANE_X + 5, plY - platH/2, platW, platH);
+  // 上方箭頭
+  ctx.beginPath();
+  ctx.moveTo(LANE_X + LANE_W/2, plY - 15);
+  ctx.lineTo(LANE_X + LANE_W/2 - 10, plY - 5);
+  ctx.lineTo(LANE_X + LANE_W/2 + 10, plY - 5);
+  ctx.closePath();
+  ctx.fillStyle = '#ffdd88';
+  ctx.fill();
+
+  // Power bar
+  if (isPlunging && plungerPull > 0) {
+    const pct = plungerPull / PLUNGER_MAX;
+    const barGrad = ctx.createLinearGradient(LANE_X + 4, 0, LANE_X + LANE_W - 4, 0);
+    barGrad.addColorStop(0, '#4caf50');
+    barGrad.addColorStop(0.5, '#ffeb3b');
+    barGrad.addColorStop(1, '#f44336');
+    ctx.fillStyle = barGrad;
+    ctx.fillRect(LANE_X + 4, PLUNGER_REST_Y - 65, (LANE_W - 8) * pct, 6);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(LANE_X + 4, PLUNGER_REST_Y - 65, LANE_W - 8, 6);
+  }
+
+  // Slots with multiplier style
+  const slotTop = H - SLOT_H;
+  ctx.fillStyle = 'rgba(30,60,100,0.8)';
+  ctx.fillRect(12, slotTop, LANE_X - 12, SLOT_H);
+
+  // Slot borders
+  ctx.strokeStyle = '#d4a530';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(12, slotTop, LANE_X - 12, SLOT_H);
+
+  for (let i = 0; i < NUM_GROUPS; i++) {
+    const s = slots[i];
+    // Slot background with color tint
+    const isFull = groups[i].length >= groupLimits[i];
+
+    // 滿了就填滿視覺效果
+    if (isFull) {
+      ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length] + '80';  // 較深的顏色
+      ctx.fillRect(s.x, slotTop, s.w, SLOT_H);
+      // 添加閃光效果
+      const gradient = ctx.createLinearGradient(s.x, slotTop, s.x, slotTop + SLOT_H);
+      gradient.addColorStop(0, 'rgba(255,255,255,0.3)');
+      gradient.addColorStop(0.5, 'rgba(255,255,255,0)');
+      gradient.addColorStop(1, 'rgba(255,255,255,0.1)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(s.x, slotTop, s.w, SLOT_H);
+    } else {
+      ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length] + '20';
+      ctx.fillRect(s.x, slotTop, s.w, SLOT_H);
+    }
+
+    // Dividers
+    if (i > 0) {
+      ctx.strokeStyle = '#d4a530';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(s.x, slotTop); ctx.lineTo(s.x, H); ctx.stroke();
+    }
+
+    // Slot labels - Royal Match multiplier style
+    ctx.fillStyle = isFull ? '#fff' : '#fff';
+    ctx.font = 'bold 11px "Noto Sans TC"';
+    ctx.textAlign = 'center';
+    ctx.fillText(`第${i+1}組`, s.x + s.w/2, slotTop + 16);
+
+    // Count indicator 或 滿了顯示 ✓
+    if (isFull) {
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText('✓ 已滿', s.x + s.w/2, slotTop + 38);
+    } else {
+      ctx.fillStyle = GROUP_COLORS[i % GROUP_COLORS.length];
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText(`${groups[i].length}/${groupLimits[i]}`, s.x + s.w/2, slotTop + 35);
     }
   }
 
-  // glow nearby pegs
-  for (const peg of pegs) {
-    const dx = peg.x - pos.x;
-    const dy = peg.y - pos.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 70) {
-      peg.hitGlow = Math.max(peg.hitGlow, 1 - dist / 70);
+  // Draw triangles
+  for (const tri of triangles) tri.draw();
+
+  // Draw click effects (漣漪效果)
+  for (let i = clickEffects.length - 1; i >= 0; i--) {
+    const effect = clickEffects[i];
+    ctx.beginPath();
+    ctx.arc(effect.x, effect.y, effect.radius, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(255, 221, 136, ${effect.alpha})`;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // 內圈
+    if (effect.radius > 20) {
+      ctx.beginPath();
+      ctx.arc(effect.x, effect.y, effect.radius * 0.5, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255, 255, 255, ${effect.alpha * 0.5})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    // 更新效果
+    effect.radius += 3;
+    effect.alpha -= 0.03;
+
+    // 移除消失的效果
+    if (effect.alpha <= 0 || effect.radius >= effect.maxRadius) {
+      clickEffects.splice(i, 1);
     }
   }
 
-  // spawn radial particles (golden sparks)
-  const sparkCount = 20;
-  for (let i = 0; i < sparkCount; i++) {
-    const angle = (Math.PI * 2 * i) / sparkCount + (Math.random() - 0.5) * 0.4;
-    const speed = 2.5 + Math.random() * 3.5;
-    const colors = ['#ffcc00', '#ff4444', '#ff8800', '#ffee88', '#ff6622'];
-    particles.push({
-      x: pos.x, y: pos.y,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      life: 1,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      size: 3 + Math.random() * 3
-    });
-  }
+  // Draw pegs
+  for (const p of pegs) p.draw();
 
-  // add ripple effect
-  touchRipples.push({ x: pos.x, y: pos.y, radius: 0, maxRadius: PUSH_RADIUS, life: 1 });
+  // Draw bumpers (sunflowers)
+  for (const b of bumpers) b.draw();
 
-  // play position-based sound
-  playTouch(pos.x, pos.y);
-}
-
-let isDragging = false;
-let lastDragTime = 0;
-
-function handleCanvasDragStart(e) {
-  isDragging = true;
-}
-function handleCanvasDragEnd(e) {
-  isDragging = false;
-}
-function handleCanvasDrag(e) {
-  if (!isDragging) return;
-  e.preventDefault();
-  const now = Date.now();
-  if (now - lastDragTime < 30) return; // throttle
-  lastDragTime = now;
-
-  const pos = getCanvasCoords(e);
-
-  // strong push on drag
-  const PUSH_RADIUS = 80;
-  const PUSH_FORCE = 10;
-  const BOUNCE_R = 30;
+  // Balls - purple/magenta style with motion trail
   for (const ball of balls) {
     if (ball.landed) continue;
-    const dx = ball.x - pos.x;
-    const dy = ball.y - pos.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < BOUNCE_R && dist > 0) {
-      // hard block: reflect and push out
-      const nx = dx / dist, ny = dy / dist;
-      const dot = ball.vx * nx + ball.vy * ny;
-      if (dot < 0) {
-        ball.vx -= 2 * dot * nx;
-        ball.vy -= 2 * dot * ny;
+
+    // Draw motion trail
+    if (ball.trail && ball.trail.length > 1 && !ball.inLane) {
+      for (let i = 1; i < ball.trail.length; i++) {
+        const t = ball.trail[i];
+        const alpha = Math.max(0, 0.4 - i * 0.035);
+        const size = BALL_R * (1 - i * 0.08);
+        if (size > 2) {
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, size, 0, Math.PI * 2);
+          // Color based on phase
+          if (ball.phase === 'sprint') {
+            ctx.fillStyle = `rgba(255, 200, 100, ${alpha})`; // Golden trail for sprint
+          } else if (ball.phase === 'apex') {
+            ctx.fillStyle = `rgba(255, 255, 200, ${alpha})`; // White glow at apex
+          } else {
+            ctx.fillStyle = `rgba(224, 64, 251, ${alpha})`; // Purple trail for plunge
+          }
+          ctx.fill();
+        }
       }
-      ball.vx += nx * PUSH_FORCE;
-      ball.vy += ny * PUSH_FORCE;
-      ball.x = pos.x + nx * BOUNCE_R;
-      ball.y = pos.y + ny * BOUNCE_R;
-    } else if (dist < PUSH_RADIUS) {
-      const force = (1 - dist / PUSH_RADIUS) * PUSH_FORCE;
-      ball.vx += (dx / dist) * force;
-      ball.vy += (dy / dist) * force;
+    }
+
+    // Glow effect during sprint phase
+    if (ball.phase === 'sprint' && !ball.inLane) {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, BALL_R + 6, 0, Math.PI * 2);
+      const glow = ctx.createRadialGradient(ball.x, ball.y, BALL_R, ball.x, ball.y, BALL_R + 8);
+      glow.addColorStop(0, 'rgba(255, 200, 100, 0.6)');
+      glow.addColorStop(1, 'rgba(255, 200, 100, 0)');
+      ctx.fillStyle = glow;
+      ctx.fill();
+    }
+
+    // Apex glow - bright white halo
+    if (ball.phase === 'apex') {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, BALL_R + 10, 0, Math.PI * 2);
+      const glow = ctx.createRadialGradient(ball.x, ball.y, BALL_R, ball.x, ball.y, BALL_R + 12);
+      glow.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+      glow.addColorStop(0.5, 'rgba(255, 220, 100, 0.4)');
+      glow.addColorStop(1, 'rgba(255, 200, 100, 0)');
+      ctx.fillStyle = glow;
+      ctx.fill();
+    }
+
+    // Main ball
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI*2);
+    const bg = ctx.createRadialGradient(ball.x - 3, ball.y - 3, 0, ball.x, ball.y, BALL_R);
+    if (ball.phase === 'sprint') {
+      // Golden ball during sprint
+      bg.addColorStop(0, '#fff');
+      bg.addColorStop(0.3, '#ffd700');
+      bg.addColorStop(0.7, '#ff9900');
+      bg.addColorStop(1, '#cc6600');
+    } else if (ball.phase === 'apex') {
+      // Bright white at apex
+      bg.addColorStop(0, '#fff');
+      bg.addColorStop(0.3, '#fff5dd');
+      bg.addColorStop(0.7, '#ffd700');
+      bg.addColorStop(1, '#ffaa00');
+    } else {
+      // Purple during plunge
+      bg.addColorStop(0, '#fff');
+      bg.addColorStop(0.3, '#e040fb');
+      bg.addColorStop(0.7, '#9c27b0');
+      bg.addColorStop(1, '#6a1b9a');
+    }
+    ctx.fillStyle = bg;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Name on ball - 永遠顯示，加深色外框
+    if (!ball.inLane) {
+      ctx.font = 'bold 12px "Noto Sans TC"';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const n = names[ball.nameIdx];
+      const displayName = n.length > 3 ? n.slice(0,2)+'..' : n;
+      // 深色外框
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 3;
+      ctx.strokeText(displayName, ball.x, ball.y);
+      // 白色文字
+      ctx.fillStyle = '#fff';
+      ctx.fillText(displayName, ball.x, ball.y);
     }
   }
 
-  // glow nearby pegs while dragging
-  for (const peg of pegs) {
-    const dx = peg.x - pos.x;
-    const dy = peg.y - pos.y;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 45) {
-      peg.hitGlow = Math.max(peg.hitGlow, 0.6 * (1 - dist / 45));
-    }
-  }
+  // Score/info display - Royal Match style
+  ctx.fillStyle = 'rgba(0,50,100,0.7)';
+  ctx.beginPath();
+  ctx.roundRect(W/2 - 60, 8, 120, 28, 10);
+  ctx.fill();
+  ctx.strokeStyle = '#ffd700';
+  ctx.lineWidth = 2;
+  ctx.stroke();
 
-  // trailing spark particles
-  if (Math.random() < 0.5) {
-    particles.push({
-      x: pos.x + (Math.random() - 0.5) * 12,
-      y: pos.y + (Math.random() - 0.5) * 12,
-      vx: (Math.random() - 0.5) * 2,
-      vy: (Math.random() - 0.5) * 2 - 1,
-      life: 0.7,
-      color: Math.random() < 0.5 ? '#ffcc00' : '#ff8844',
-      size: 2 + Math.random() * 2
-    });
+  // Next indicator or remaining count
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 12px "Noto Sans TC"';
+  ctx.textAlign = 'center';
+  if (launchQueue.length > 0 && !currentBall) {
+    ctx.fillText(`下一位: ${names[launchQueue[0]]}`, W/2, 27);
+  } else {
+    ctx.fillText(`剩餘: ${launchQueue.length}/${names.length}`, W/2, 27);
   }
 }
 
-// mouse events
-canvas.addEventListener('mousedown', function(e) {
-  handleCanvasTap(e);
-  handleCanvasDragStart(e);
-});
-canvas.addEventListener('mousemove', handleCanvasDrag);
-canvas.addEventListener('mouseup', handleCanvasDragEnd);
-canvas.addEventListener('mouseleave', handleCanvasDragEnd);
+// ============ GAME CONTROL ============
+function toggleAuto() {
+  autoMode = !autoMode;
+  const btn = document.getElementById('btnAuto');
+  if (autoMode) {
+    btn.textContent = '停止自動';
+    btn.style.background = 'linear-gradient(135deg, #f44336, #c62828)';
+    runAuto();
+  } else {
+    btn.textContent = '自動發射';
+    btn.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+    if (autoTimer) clearTimeout(autoTimer);
+  }
+}
 
-// touch events
-canvas.addEventListener('touchstart', function(e) {
-  handleCanvasTap(e);
-  handleCanvasDragStart(e);
-}, { passive: false });
-canvas.addEventListener('touchmove', function(e) {
-  handleCanvasDrag(e);
-}, { passive: false });
-canvas.addEventListener('touchend', handleCanvasDragEnd);
-canvas.addEventListener('touchcancel', handleCanvasDragEnd);
+function runAuto() {
+  if (!autoMode) return;
+  if (launchQueue.length === 0) {
+    autoMode = false;
+    document.getElementById('btnAuto').textContent = '自動發射';
+    document.getElementById('btnAuto').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+    return;
+  }
+  if (!currentBall) {
+    launchNext();
+    setTimeout(() => {
+      if (currentBall && currentBall.inLane) {
+        plungerPull = PLUNGER_MAX * (0.6 + Math.random() * 0.4);
+        setTimeout(() => { launchBall(); setTimeout(runAuto, 1000); }, 350);
+      }
+    }, 250);
+  } else {
+    autoTimer = setTimeout(runAuto, 600);
+  }
+}
+
+function showCompletion() {
+  playComplete();
+  const lines = [];
+  for (let i = 0; i < NUM_GROUPS; i++) {
+    lines.push(`🏆 第${i+1}組：${groups[i].join('、') || '(空)'}`);
+  }
+  document.getElementById('completionText').innerHTML = lines.join('<br>');
+  document.getElementById('completionOverlay').classList.add('show');
+}
+
+function resetGame() {
+  autoMode = false;
+  if (autoTimer) clearTimeout(autoTimer);
+  document.getElementById('btnAuto').textContent = '自動發射';
+  document.getElementById('btnAuto').style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+  syncNamesAndReset();
+}
+
+// ============ GAME LOOP ============
+function gameLoop(ts) {
+  if (lastTime === 0) lastTime = ts;
+  const dt = Math.min((ts - lastTime) / 1000, 0.05);
+  lastTime = ts;
+
+  updatePhysics(dt);
+  draw();
+
+  requestAnimationFrame(gameLoop);
+}
 
 // ============ INIT ============
-buildPegs();
-renderNameTags();
-resetGame();
-gameLoop();
+buildSlots();
+syncNamesAndReset();
+requestAnimationFrame(gameLoop);
 </script>
 </body>
 </html>
