@@ -548,43 +548,39 @@ for (let i = 0; i < 5; i++) {
 }
 
 
-// Walls - frame with rounder arc and proper lane walls
+// Walls - arc connects to lane RIGHT side (outer wall)
 const walls = [];
 function addWall(x1, y1, x2, y2) { walls.push({x1, y1, x2, y2}); }
 
 const FRAME_LEFT = 12;
 const FRAME_TOP = 55;
-const LANE_WALL_TOP = 200;  // Lane walls start here (taller lane)
 
 // LEFT WALL
 addWall(FRAME_LEFT, FRAME_TOP, FRAME_LEFT, H - SLOT_H);
 
-// TOP ARC - more rounded (higher arcHeight)
+// TOP ARC - 180 degree semicircle from left to lane outer wall
 const arcStartX = FRAME_LEFT;
-const arcEndX = W - 8;
+const arcEndX = W - 8;  // Connects to lane RIGHT side!
 const arcCx = (arcStartX + arcEndX) / 2;
-const halfWidth = (arcEndX - arcStartX) / 2;
-const arcHeight = 50;  // More rounded arc!
+const arcR = (arcEndX - arcStartX) / 2;  // True semicircle: radius = half width
+const arcCy = FRAME_TOP;  // Center at frame top
 
-const arcR = (arcHeight * arcHeight + halfWidth * halfWidth) / (2 * arcHeight);
-const arcCy = FRAME_TOP - arcHeight + arcR;
-
+// Draw 180 degree arc (from PI to 0, which is left to right on top)
 for (let i = 0; i < 16; i++) {
-  const t1 = i / 16;
-  const t2 = (i + 1) / 16;
-  const x1 = arcStartX + t1 * (arcEndX - arcStartX);
-  const x2 = arcStartX + t2 * (arcEndX - arcStartX);
-  const dx1 = x1 - arcCx;
-  const dx2 = x2 - arcCx;
-  const y1 = arcCy - Math.sqrt(Math.max(0, arcR * arcR - dx1 * dx1));
-  const y2 = arcCy - Math.sqrt(Math.max(0, arcR * arcR - dx2 * dx2));
+  const angle1 = Math.PI - (i / 16) * Math.PI;
+  const angle2 = Math.PI - ((i + 1) / 16) * Math.PI;
+  const x1 = arcCx + Math.cos(angle1) * arcR;
+  const y1 = arcCy - Math.sin(angle1) * arcR;
+  const x2 = arcCx + Math.cos(angle2) * arcR;
+  const y2 = arcCy - Math.sin(angle2) * arcR;
   addWall(x1, y1, x2, y2);
 }
 
-// LANE LEFT WALL - prevents balls from bouncing back into lane
+// LANE LEFT WALL - starts at 200 to allow ball entry from arc at top
+const LANE_WALL_TOP = 200;
 addWall(LANE_X, LANE_WALL_TOP, LANE_X, H - SLOT_H);
 
-// LANE OUTER WALL - right edge
+// LANE OUTER WALL - connects from arc down
 addWall(W - 8, FRAME_TOP, W - 8, H);
 
 function buildSlots() {
@@ -736,11 +732,11 @@ function launchNext() {
 function launchBall() {
   if (!currentBall || !currentBall.inLane || plungerPull < 5) return;
   const power = plungerPull / PLUNGER_MAX;
-  // 【起跑：線性衝刺】- Launch with powerful upward velocity
+  // Launch straight up
   currentBall.vy = -1200 - power * 900;
   currentBall.vx = 0;
   currentBall.inLane = false;
-  currentBall.phase = 'sprint'; // Begin the sprint phase
+  currentBall.phase = 'sprint';
   currentBall.trail = [];
   playLaunch();
   plungerPull = 0;
