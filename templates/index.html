@@ -553,7 +553,7 @@ const walls = [];
 function addWall(x1, y1, x2, y2) { walls.push({x1, y1, x2, y2}); }
 
 const FRAME_LEFT = 12;
-const FRAME_TOP = 55;  // Arc position
+const FRAME_TOP = 120;  // Arc position
 
 // LEFT WALL
 addWall(FRAME_LEFT, FRAME_TOP, FRAME_LEFT, H - SLOT_H);
@@ -563,7 +563,7 @@ const arcStartX = FRAME_LEFT;
 const arcEndX = W - 8;  // Connects to lane RIGHT side!
 const arcCx = (arcStartX + arcEndX) / 2;
 const halfWidth = (arcEndX - arcStartX) / 2;
-const arcHeight = 50;
+const arcHeight = 160;
 
 const arcR = (arcHeight * arcHeight + halfWidth * halfWidth) / (2 * arcHeight);
 const arcCy = FRAME_TOP - arcHeight + arcR;
