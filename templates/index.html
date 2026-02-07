@@ -604,50 +604,63 @@ class Triangle {
 const bumpers = [];
 const PLAY_W = LANE_X - 24; // playable width ~436
 
-// 橘色圓釘 - 交錯排列，包含左右牆邊
+// 橘色圓釘 - 統一生成邏輯，牆邊和中間一起考慮
 const pegs = [];
-const PEG_AREA_LEFT = 50;
-const PEG_AREA_RIGHT = LANE_X - 30;
+const PEG_AREA_LEFT = 28;  // 靠近左牆 (牆在 x=12)
+const PEG_AREA_RIGHT = LANE_X - 28;  // 靠近發射軌道
 const PEG_AREA_WIDTH = PEG_AREA_RIGHT - PEG_AREA_LEFT;
-const ROW_SPACING = 45;  // 縮小間距配合小球
+const ROW_SPACING = 50;  // 行間距
+const MIN_PEG_DISTANCE = 45;  // 最小釘子間距
 
-// 左側牆邊釘子 - 阻擋順牆滑落 (間距加大)
-pegs.push(new Peg(25, 290));
-pegs.push(new Peg(25, 390));
-pegs.push(new Peg(25, 490));
+// 統一生成釘子的函數
+function generatePegs() {
+  const tempPegs = [];
+  const startY = 260;
+  const endY = 540;
+  const numRows = Math.floor((endY - startY) / ROW_SPACING) + 1;
 
-// 右側牆邊釘子 - 阻擋順牆滑落 (間距加大)
-pegs.push(new Peg(LANE_X - 20, 290));
-pegs.push(new Peg(LANE_X - 20, 390));
-pegs.push(new Peg(LANE_X - 20, 490));
+  for (let row = 0; row < numRows; row++) {
+    const y = startY + row * ROW_SPACING;
+    const isEvenRow = row % 2 === 0;
 
-// Row 1 - 4 pegs
-for (let i = 0; i < 4; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 260));
+    // 偶數行 5 顆，奇數行 4 顆（交錯）
+    const numPegs = isEvenRow ? 5 : 4;
+    const spacing = PEG_AREA_WIDTH / (numPegs - 1);
+    const offsetX = isEvenRow ? 0 : spacing / 2;
+
+    for (let i = 0; i < numPegs; i++) {
+      const x = PEG_AREA_LEFT + offsetX + i * spacing;
+      // 確保不超出範圍
+      if (x >= PEG_AREA_LEFT && x <= PEG_AREA_RIGHT) {
+        tempPegs.push({ x, y });
+      }
+    }
+  }
+
+  // 檢查並移除太近的釘子
+  const finalPegs = [];
+  for (const peg of tempPegs) {
+    let tooClose = false;
+    for (const existing of finalPegs) {
+      const dx = peg.x - existing.x;
+      const dy = peg.y - existing.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < MIN_PEG_DISTANCE) {
+        tooClose = true;
+        break;
+      }
+    }
+    if (!tooClose) {
+      finalPegs.push(peg);
+    }
+  }
+
+  return finalPegs;
 }
-// Row 2 - 5 pegs (交錯)
-for (let i = 0; i < 5; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 305));
-}
-// Row 3 - 4 pegs
-for (let i = 0; i < 4; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 350));
-}
-// Row 4 - 5 pegs (交錯)
-for (let i = 0; i < 5; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 395));
-}
-// Row 5 - 4 pegs
-for (let i = 0; i < 4; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 440));
-}
-// Row 6 - 5 pegs (交錯)
-for (let i = 0; i < 5; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + i * (PEG_AREA_WIDTH / 4), 485));
-}
-// Row 7 - 4 pegs
-for (let i = 0; i < 4; i++) {
-  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 4), 530));
+
+// 生成所有釘子
+for (const p of generatePegs()) {
+  pegs.push(new Peg(p.x, p.y));
 }
 
 // 白色三角形障礙物 - 暫時移除
