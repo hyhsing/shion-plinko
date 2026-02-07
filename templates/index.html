@@ -330,7 +330,7 @@ const H = canvas.height;
 
 // Physics constants
 const GRAVITY = 980;
-const BALL_R = 10;
+const BALL_R = 13;  // 縮小為 2/3
 const SUBSTEPS = 4;
 const WALL_REST = 0.65;
 const BUMPER_REST = 1.1;
@@ -338,7 +338,7 @@ const PEG_REST = 0.55;
 
 // Layout
 const SLOT_H = 55;
-const LANE_W = 32;
+const LANE_W = 50;  // 配合大球
 const LANE_X = W - LANE_W - 8;
 const PLUNGER_REST_Y = H - 50;
 const PLUNGER_MAX = 60;
@@ -509,24 +509,42 @@ class Triangle {
 const bumpers = [];
 const PLAY_W = LANE_X - 24; // playable width ~436
 
-// Orange pegs - arranged in neat grid pattern
+// 橘色圓釘 - 交錯排列，包含左右牆邊
 const pegs = [];
-// Row between bumper rows
-for (let i = 0; i < 4; i++) {
-  pegs.push(new Peg(65 + i * 110, 225));
-}
+const PEG_AREA_LEFT = 50;
+const PEG_AREA_RIGHT = LANE_X - 40;
+const PEG_AREA_WIDTH = PEG_AREA_RIGHT - PEG_AREA_LEFT;
+const ROW_SPACING = 70;
+
+// 左側牆邊釘子 - 阻擋順牆滑落
+pegs.push(new Peg(25, 300));
+pegs.push(new Peg(25, 380));
+pegs.push(new Peg(25, 460));
+
+// 右側牆邊釘子 - 阻擋順牆滑落
+pegs.push(new Peg(LANE_X - 25, 300));
+pegs.push(new Peg(LANE_X - 25, 380));
+pegs.push(new Peg(LANE_X - 25, 460));
+
+// Row 1 - 3 pegs
 for (let i = 0; i < 3; i++) {
-  pegs.push(new Peg(100 + i * 130, 315));
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 3), 270));
 }
-// Bottom guide pegs - pyramid pattern
-for (let i = 0; i < 5; i++) {
-  pegs.push(new Peg(60 + i * 90, 420));
+// Row 2 - 2 pegs (交錯在中間)
+for (let i = 0; i < 2; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 1) * (PEG_AREA_WIDTH / 3), 330));
 }
-for (let i = 0; i < 6; i++) {
-  pegs.push(new Peg(45 + i * 75, 470));
+// Row 3 - 3 pegs
+for (let i = 0; i < 3; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 3), 390));
 }
-for (let i = 0; i < 7; i++) {
-  pegs.push(new Peg(35 + i * 62, 520));
+// Row 4 - 2 pegs (交錯)
+for (let i = 0; i < 2; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 1) * (PEG_AREA_WIDTH / 3), 450));
+}
+// Row 5 - 3 pegs
+for (let i = 0; i < 3; i++) {
+  pegs.push(new Peg(PEG_AREA_LEFT + (i + 0.5) * (PEG_AREA_WIDTH / 3), 510));
 }
 
 // 白色三角形障礙物 - 暫時移除
@@ -897,10 +915,15 @@ function updatePhysics(dt) {
       if (ball.y + BALL_R >= slotTop && ball.x >= 12 && ball.x < LANE_X) {
         let slotIdx = Math.floor((ball.x - 12) / ((LANE_X - 12) / NUM_GROUPS));
         slotIdx = Math.max(0, Math.min(NUM_GROUPS - 1, slotIdx));
+
+        // 如果該位子滿了，彈開！
         if (groups[slotIdx].length >= groupLimits[slotIdx]) {
-          slotIdx = findAvailableSlot();
-        }
-        if (slotIdx >= 0) {
+          ball.y = slotTop - BALL_R - 1;
+          ball.vy = -Math.abs(ball.vy) * 0.7 - 200;  // 向上彈開
+          ball.vx += (Math.random() - 0.5) * 300;  // 隨機左右偏移
+          playPeg();  // 播放碰撞音效
+        } else {
+          // 位子有空，降落
           ball.x = slots[slotIdx].x + slots[slotIdx].w / 2;
           ball.y = slotTop + SLOT_H / 2;
           ballLanded(ball, slotIdx);
@@ -1030,18 +1053,22 @@ function draw() {
   ctx.lineTo(LANE_X + LANE_W/2, sBot);
   ctx.stroke();
 
-  // Plunger head
-  ctx.beginPath();
-  ctx.arc(LANE_X + LANE_W/2, plY, 12, 0, Math.PI*2);
-  const pg = ctx.createRadialGradient(LANE_X + LANE_W/2 - 3, plY - 3, 0, LANE_X + LANE_W/2, plY, 12);
-  pg.addColorStop(0, '#4caf50');
-  pg.addColorStop(0.5, '#388e3c');
-  pg.addColorStop(1, '#1b5e20');
-  ctx.fillStyle = pg;
-  ctx.fill();
-  ctx.strokeStyle = '#fff';
+  // Plunger head - 箭頭平台樣式
+  const platW = LANE_W - 10;
+  const platH = 8;
+  ctx.fillStyle = '#d4a530';
+  ctx.fillRect(LANE_X + 5, plY - platH/2, platW, platH);
+  ctx.strokeStyle = '#ffdd88';
   ctx.lineWidth = 2;
-  ctx.stroke();
+  ctx.strokeRect(LANE_X + 5, plY - platH/2, platW, platH);
+  // 上方箭頭
+  ctx.beginPath();
+  ctx.moveTo(LANE_X + LANE_W/2, plY - 15);
+  ctx.lineTo(LANE_X + LANE_W/2 - 10, plY - 5);
+  ctx.lineTo(LANE_X + LANE_W/2 + 10, plY - 5);
+  ctx.closePath();
+  ctx.fillStyle = '#ffdd88';
+  ctx.fill();
 
   // Power bar
   if (isPlunging && plungerPull > 0) {
@@ -1179,13 +1206,20 @@ function draw() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Name on ball (only during plunge or when slower)
-    if (!ball.inLane && ball.phase !== 'sprint') {
-      ctx.fillStyle = '#fff';
-      ctx.font = 'bold 8px "Noto Sans TC"';
+    // Name on ball - 永遠顯示，加深色外框
+    if (!ball.inLane) {
+      ctx.font = 'bold 12px "Noto Sans TC"';
       ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
       const n = names[ball.nameIdx];
-      ctx.fillText(n.length > 3 ? n.slice(0,2)+'..' : n, ball.x, ball.y + 3);
+      const displayName = n.length > 3 ? n.slice(0,2)+'..' : n;
+      // 深色外框
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 3;
+      ctx.strokeText(displayName, ball.x, ball.y);
+      // 白色文字
+      ctx.fillStyle = '#fff';
+      ctx.fillText(displayName, ball.x, ball.y);
     }
   }
 
