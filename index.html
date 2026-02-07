@@ -180,8 +180,8 @@
   <label>組數:</label>
   <input type="number" id="numGroups" value="6" min="2" max="12" onchange="onGroupsChange()">
   <label>每組人數:</label>
-  <input type="range" id="perGroupSlider" min="1" max="10" value="5" style="width:80px;accent-color:#d4a530" oninput="onPerGroupChange(this.value)">
-  <span id="perGroupValue" style="font-weight:bold;color:#2d5a87;min-width:20px">5</span>
+  <input type="range" id="perGroupSlider" min="1" max="10" value="2" style="width:80px;accent-color:#d4a530" oninput="onPerGroupChange(this.value)">
+  <span id="perGroupValue" style="font-weight:bold;color:#2d5a87;min-width:20px">2</span>
   <label>🔊</label>
   <input type="range" id="volumeSlider" min="0" max="100" value="50" style="width:60px;accent-color:#ff4081" oninput="setVolume(this.value)">
 </div>
@@ -311,7 +311,7 @@ function syncNamesAndReset() {
   names = customNames.length > 0 ? [...customNames] : [...DEFAULT_NAMES];
   if (NUM_GROUPS > names.length) NUM_GROUPS = names.length;
   // 使用 slider 的值來設定每組人數
-  const perGroup = parseInt(document.getElementById('perGroupSlider').value) || 5;
+  const perGroup = parseInt(document.getElementById('perGroupSlider').value) || 2;
   groupLimits = Array(NUM_GROUPS).fill(perGroup);
   groups = Array.from({length: NUM_GROUPS}, () => []);
   buildSlots();
@@ -321,7 +321,19 @@ function syncNamesAndReset() {
   balls = [];
   currentBall = null;
   gameStarted = false;
-  document.getElementById('btnLaunch').disabled = false;
+
+  // 檢查位子是否足夠
+  const totalSlots = NUM_GROUPS * perGroup;
+  const btnLaunch = document.getElementById('btnLaunch');
+  if (totalSlots < names.length) {
+    btnLaunch.disabled = true;
+    btnLaunch.textContent = `位子不足 (${totalSlots}/${names.length})`;
+    btnLaunch.style.background = '#999';
+  } else {
+    btnLaunch.disabled = false;
+    btnLaunch.textContent = '🎱 發射彈珠';
+    btnLaunch.style.background = '';
+  }
 }
 function onGroupsChange() { syncNamesAndReset(); renderNameTags(); }
 function onPerGroupChange(val) {
